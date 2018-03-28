@@ -66,22 +66,22 @@ public class Maquina {
 
     }
 
-    public void atribuir(int reg, int num, int div, int sinal) {
+    public void atribuir(int reg, int num, int div, int sinal) {//Testado e funcionando
         this.regs.set(reg, atribui(this.regs.get(reg), num));
         this.divs.set(reg, atribui(this.divs.get(reg), div));
         this.sinais.set(reg, atribui(this.sinais.get(reg), sinal));
-    }
+    } 
 
     //Itera o valor do registrador zerado até que ele chegue no valor desejado
     private int atribui(int valorReg, int valor) {
         valorReg = zera(valorReg);
-        for (int i = valor; i >= 0; i--) {
+        for (int i = valor; i > 0; i--) {
             valorReg++;
         }
         return valor;
     }
 
-    public void somaAB(int reg1, int reg2) {
+    public void somaAB(int reg1, int reg2) { //Testado e funcionando
         int aux1, aux2;
         aux1 = this.regs.get(reg1);
         aux2 = this.regs.get(reg2);
@@ -179,7 +179,7 @@ public class Maquina {
         }
     }
 
-    public void somaABC(int reg1, int reg2, int reg3) {
+    public void somaABC(int reg1, int reg2, int reg3) { //Testado e funcionando
         int aux1, aux2, aux3;
         zerar(reg3);
         aux1 = this.regs.get(reg1);

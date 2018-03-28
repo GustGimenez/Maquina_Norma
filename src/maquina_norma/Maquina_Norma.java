@@ -5,6 +5,10 @@
  */
 package maquina_norma;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 /**
  *
  * @author Gustavo
@@ -13,7 +17,16 @@ public class Maquina_Norma {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // TODO code application logic here
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        Maquina maquina = new Maquina();
+        int A = Integer.valueOf(input.readLine());
+        int valor = Integer.valueOf(input.readLine());
+        maquina.atribuir(A, valor, 1, 1);
+        int B = Integer.valueOf(input.readLine());
+        valor = Integer.valueOf(input.readLine());
+        maquina.atribuir(B, valor, 1, 1);
+        maquina.somaABC(A, B, 2);
     }
 }
