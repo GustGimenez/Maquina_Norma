@@ -15,15 +15,15 @@ public class Maquina {
 
     //Cada elemento do arraylist representa um registrador
     //3 arraylists para manter a ligação de cada registador
-    public ArrayList<Integer> regs;
-    public ArrayList<Integer> sinais;
-    public ArrayList<Integer> divs;
+    public ArrayList<Integer> regs; //Valor no registrador
+    public ArrayList<Integer> sinais;   //0: positivo, 1: negativo
+    public ArrayList<Integer> divs;     //Número pelo qual o valor no registrador será divido para representar um real
 
     public Maquina() {
         this.regs = new ArrayList();
         this.sinais = new ArrayList();
         this.divs = new ArrayList();
-
+        //Adiçõ de 4 registradores default, A, B, C, e D
         addReg();
         addReg();
         addReg();
@@ -32,8 +32,8 @@ public class Maquina {
 
     public void addReg() {
         this.regs.add(0);
-        this.sinais.add(0);
-        this.divs.add(1);
+        this.sinais.add(0); 
+        this.divs.add(1);  
     }
 
     private int zera(int aux) {
@@ -54,7 +54,7 @@ public class Maquina {
         // Normaliza o divisor
         aux = this.divs.get(reg);
         aux = zera(aux);
-        aux++;
+        aux++; //Deixando com o valor '1'
         this.divs.set(reg, aux);
 
         //Verifica o sinal.
@@ -72,6 +72,7 @@ public class Maquina {
         this.sinais.set(reg, atribui(this.sinais.get(reg), sinal));
     }
 
+    //Itera o valor do registrador zerado até que ele chegue no valor desejado
     private int atribui(int valorReg, int valor) {
         valorReg = zera(valorReg);
         for (int i = valor; i >= 0; i--) {
@@ -87,7 +88,7 @@ public class Maquina {
         if (this.sinais.get(reg1) == 0) {
             if (this.sinais.get(reg2) == 0) {
                 //SOMA DE DOIS NUMEROS POSITIVOS
-                while (true) {
+                while (true) {  //Apenas decrementa o B e incrementa o A até que B seja 0
                     if (aux2 == 0) {
                         this.regs.set(reg1, aux1);
                         this.regs.set(reg2, aux2);
@@ -100,9 +101,9 @@ public class Maquina {
             //|A| < |B|
             {
                 if (this.AmenorB(aux1, aux2)) {
-                    while (true) {
+                    while (true) { //Subtrai de A até que ele seja 0
                         if (aux1 == 0) {
-                            while (true) {
+                            while (true) {  //Soma em A no lado negativo da reta
                                 if (aux2 == 0) {
                                     this.sinais.set(reg1, 1); // Mesma coisa que incrementar 1
                                     this.sinais.set(reg2, 0); // Mesma coisa que decrementar 1
@@ -119,7 +120,7 @@ public class Maquina {
                     }
                     //|A| >= |B|
                 } else {
-                    while (true) {
+                    while (true) { //Mesmo pensamento dos dois serem positivos
                         if (aux2 == 0) {
                             this.sinais.set(reg2, 0); // Mesma coisa que decrementar 1
                             this.regs.set(reg1, aux1);
@@ -204,7 +205,7 @@ public class Maquina {
             return;
         }
         int aux = this.sinais.get(reg1);
-        aux++;
+        aux--;
         this.sinais.set(reg1, aux);
     }
 
@@ -222,6 +223,8 @@ public class Maquina {
 //        }
 //    }
 
+    //Decrementa ambos os valores, aquele que chegar em 0 primeiro é o menor
+    //Ou, se chegarem juntos, nenhum é menor
     public boolean AmenorB(int valorA, int valorB) {
         while (true) {
             if (valorA == 0) {
@@ -239,6 +242,7 @@ public class Maquina {
         }
     }
 
+    //Praticamente o memso pensamento
     public boolean AmenorIgualB(int valorA, int valorB) {
         while (true) {
             if (valorA == 0) {
@@ -250,9 +254,5 @@ public class Maquina {
             valorA--;
             valorB--;
         }
-    }
-    
-    public void TestePush(){
-        System.out.println("Apenas Teste Cara!");
     }
 }
