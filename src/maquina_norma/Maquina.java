@@ -32,8 +32,8 @@ public class Maquina {
 
     public void addReg() {
         this.regs.add(0);
-        this.sinais.add(0); 
-        this.divs.add(1);  
+        this.sinais.add(0);
+        this.divs.add(1);
     }
 
     private int zera(int aux) {
@@ -134,7 +134,7 @@ public class Maquina {
             }
 
         } else if (this.sinais.get(reg2) == 0) { // A é negativo e B Positivo
-            if (this.AmenorIgualB(aux1, aux2)) {
+            if (this.AmenorIgualB(aux1, aux2)) { //|A| <= |B|
                 while (true) {
                     if (aux1 == 0) {
                         while (true) {
@@ -185,16 +185,119 @@ public class Maquina {
         aux1 = this.regs.get(reg1);
         aux2 = this.regs.get(reg2);
         aux3 = this.regs.get(reg3);
-        while (true) {
-            if (aux2 == 0) {
-                this.regs.set(reg1, aux1);
-                this.regs.set(reg2, aux2);
-                somaAB(reg2, reg3);
-                return;
+
+        //Setar o mesmo valor do reg2 para o reg3, para ser usado no somaAB com reg2 e reg3
+        if (this.sinais.get(reg2) == 0) {
+            this.sinais.set(reg3, 0);
+        } else {
+            this.sinais.set(reg3, 1);
+        }
+
+        if (this.sinais.get(reg1) == 0) {
+            if (this.sinais.get(reg2) == 0) {
+                //A e B são positivos
+                while (true) {
+                    if (aux2 == 0) {
+                        this.regs.set(reg1, aux1);
+                        this.regs.set(reg2, aux2);
+                        somaAB(reg2, reg3);
+                        return;
+                    }
+                    aux3++;
+                    aux1++;
+                    aux2--;
+                }
+            } else { //A é positivo e B é negativo
+                if (AmenorB(aux1, aux2)) { //|A| < |B|
+                    while (true) {
+                        if (aux1 == 0) {
+                            while (true) {
+                                if (aux2 == 0) {
+                                    this.regs.set(reg1, aux1);
+                                    this.regs.set(reg2, aux2);
+                                    this.regs.set(reg3, aux3);
+                                    this.sinais.set(reg1, 1);
+                                    this.sinais.set(reg2, 0);
+                                    somaAB(reg2, reg3); //Volta o valor de reg2 ao original
+                                    return;
+                                }
+                                aux1++;
+                                aux2--;
+                                aux3++;
+                            }
+                        }
+                        aux1--;
+                        aux2--;
+                        aux3++;
+                    }
+                } else {   //|A| > |B|
+                    while (true) {
+                        if (aux2 == 0) {
+                            this.regs.set(reg1, aux1);
+                            this.regs.set(reg2, aux2);
+                            this.regs.set(reg3, aux3);
+                            this.sinais.set(reg2, 0);
+                            somaAB(reg2, reg3);
+                            return;
+                        }
+                        aux1--;
+                        aux2--;
+                        aux3++;
+                    }
+                }
             }
-            aux3++;
-            aux1++;
-            aux2--;
+        } else {
+            if (this.sinais.get(reg2) == 0) { //A é negativo e B é positivo
+                if (AmenorIgualB(aux1, aux2)) { //|A| <= |B|
+                    while (true) {
+                        if (aux1 == 0) {
+                            while (true) {
+                                if (aux2 == 0) {
+                                    this.regs.set(reg1, aux1);
+                                    this.regs.set(reg2, aux2);
+                                    this.regs.set(reg3, aux3);
+                                    this.sinais.set(reg1, 0);
+                                    somaAB(reg2, reg3); //Volta o valor de reg2 ao original
+                                    return;
+                                }
+                                aux1++;
+                                aux2--;
+                                aux3++;
+                            }
+                        }
+                        aux1--;
+                        aux2--;
+                        aux3++;
+                    }
+                } else {    //|A| > |B|
+                    while (true) {
+                        if (aux2 == 0) {
+                            this.regs.set(reg1, aux1);
+                            this.regs.set(reg2, aux2);
+                            this.regs.set(reg3, aux3);
+                            somaAB(reg2, reg3); //Volta o valor de reg2 ao original
+                            return;
+                        }
+                        aux1--;
+                        aux2--;
+                        aux3++;
+                    }
+                }
+            } else {   //A e B são negativos
+                while (true) {
+                    if (aux2 == 0) {
+                        this.regs.set(reg1, aux1);
+                        this.regs.set(reg2, aux2);
+                        this.regs.set(reg3, aux3);
+                        this.sinais.set(reg2, 0);
+                        somaAB(reg2, reg3); //Volta o valor de reg2 ao original
+                        return;
+                    }
+                    aux1++;
+                    aux2--;
+                    aux3++;
+                }
+            }
         }
     }
 
@@ -222,7 +325,6 @@ public class Maquina {
 //            }
 //        }
 //    }
-
     //Decrementa ambos os valores, aquele que chegar em 0 primeiro é o menor
     //Ou, se chegarem juntos, nenhum é menor
     public boolean AmenorB(int valorA, int valorB) {
