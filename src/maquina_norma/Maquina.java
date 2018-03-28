@@ -251,4 +251,8 @@ public class Maquina {
             valorB--;
         }
     }
+    
+    public void TestePush(){
+        System.out.println("Apenas Teste Cara!");
+    }
 }
