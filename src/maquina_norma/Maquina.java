@@ -300,11 +300,12 @@ public class Maquina {
         }
     }
 
-    public void somaNumABC(int pos1, int pos2, Registrador regC) {
+    public void somaNumABC(int pos1, int pos2, int pos3) {
         //Soma A e B e armazena resultado em A
-        Registrador regA, regB, sinalA, sinalB;
+        Registrador regA, regB, regC, sinalA, sinalB;
         regA = this.regs.get(pos1);
         regB = this.regs.get(pos2);
+        regC = this.regs.get(pos3);
         sinalA = this.sinais.get(pos1);
         sinalB = this.sinais.get(pos2);
         if (sinalA.isZero()) {
