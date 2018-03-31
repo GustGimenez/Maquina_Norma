@@ -216,26 +216,32 @@ public class Maquina {
         }
     }
 
-    private void atribuirRegABC(Registrador reg1, Registrador reg2, Registrador reg3) {
-        this.zeraReg(reg1);
-        this.somaRegABC(reg1, reg2, reg3);
+    private void atribuirRegABC(Registrador regA, Registrador regB, Registrador regC) {
+        this.zeraReg(regA);
+        this.somaRegABC(regA, regB, regC);
     }
 
+    public void multiplicaRegACBD(Registrador regA, Registrador regB, Registrador regC, Registrador regD) {
+        this.zeraReg(regC);
+        while (true) {
+            if (regA.isZero()) {
+                break;
+            }
+            regA.decrementa();
+            regC.incrementa();
+        }
 
-//    public void multiplicaAB_CD(int reg1, int reg2, int reg3, int reg4) {
-//        zerar(reg3);
-//        int aux1, aux2, aux3, aux4;
-//        aux1 = this.regs.get(reg1);
-//        aux2 = this.regs.get(reg2);
-//        aux3 = this.regs.get(reg3);
-//        aux4 = this.regs.get(reg4);
-//        while (true) {
-//            if () {
-//
-//            }
-//        }
-//    }
-    
+        while (true) {
+            if (regC.isZero()) {
+                return;
+            }
+            this.somaRegABC(regA, regB, regD);
+            regC.decrementa();
+        }
+
+    }
+
+    // Operação com NUMEROS
     public void zerarNum(int pos) {
         Registrador aux = this.regs.get(pos); // Pega o valor do registrador do conjunto de registadores
         // Processamento no registrador
@@ -346,11 +352,35 @@ public class Maquina {
         sinalA = this.sinais.get(pos1);
         sinalB = this.sinais.get(pos2);
         this.atribuirRegABC(regA, regB, regC);
-        
+
         this.zeraReg(sinalA);
         if (sinalB.isZero()) {
             return;
         }
         sinalA.incrementa();
+    }
+
+    public void multiplicaNumACBD(int pos1, int pos2, int pos3, int pos4) {
+        Registrador regA, regB, regC, regD;
+        Registrador sinalA, sinalB;
+
+        regA = this.regs.get(pos1);
+        regB = this.regs.get(pos2);
+        regC = this.regs.get(pos3);
+        regD = this.regs.get(pos4);
+
+        sinalA = this.sinais.get(pos1);
+        sinalB = this.sinais.get(pos2);
+        this.multiplicaRegACBD(regA, regB, regC, regD);
+
+        if (sinalB.isZero()) {
+            return;
+        }
+
+        if (sinalA.isZero()) {
+            sinalA.incrementa();
+        } else {
+            sinalA.decrementa();
+        }
     }
 }
