@@ -15,302 +15,212 @@ public class Maquina {
 
     //Cada elemento do arraylist representa um registrador
     //3 arraylists para manter a ligação de cada registador
-    public ArrayList<Integer> regs; //Valor no registrador
-    public ArrayList<Integer> sinais;   //0: positivo, 1: negativo
-    public ArrayList<Integer> divs;     //Número pelo qual o valor no registrador será divido para representar um real
+    public ArrayList<Registrador> regs; //Valor no registrador
+    public ArrayList<Registrador> sinais;   //0: positivo, 1: negativo
+    public ArrayList<Registrador> divs;     //Número pelo qual o valor no registrador será divido para representar um real
 
     public Maquina() {
         this.regs = new ArrayList();
         this.sinais = new ArrayList();
         this.divs = new ArrayList();
         //Adiçõ de 4 registradores default, A, B, C, e D
-        addReg();
-        addReg();
-        addReg();
-        addReg();
+        addNum();
+        addNum();
+        addNum();
+        addNum();
     }
 
-    public void addReg() {
-        this.regs.add(0);
-        this.sinais.add(0);
-        this.divs.add(1);
+    // Numeros são formados por 3 Registradores: Numerador, Divisor e Sinal.
+    public void addNum() {
+        this.regs.add(new Registrador());
+        this.sinais.add(new Registrador());
+        Registrador r = new Registrador();
+        r.incrementa();
+        this.divs.add(r);
     }
 
-    private int zera(int aux) {
+    // Operações com registradores 
+    private void zeraReg(Registrador reg) {
         while (true) {
-            if (aux == 0) {
-                return aux;
+            if (reg.isZero()) {
+                return;
             }
-            aux--;
+            reg.decrementa();
         }
     }
 
-    public void zerar(int reg) {
-        int aux = this.regs.get(reg); // Pega o valor do registrador do conjunto de registadores
-        // Processamento no registrador
-        aux = zera(aux);
-        this.regs.set(reg, aux);
-
-        // Normaliza o divisor
-        aux = this.divs.get(reg);
-        aux = zera(aux);
-        aux++; //Deixando com o valor '1'
-        this.divs.set(reg, aux);
-
-        //Verifica o sinal.
-        if (this.sinais.get(reg) == 1) {
-            aux = this.sinais.get(reg);
-            aux--;
-            this.sinais.set(reg, aux);
+    private void atribuiReg(Registrador reg, int num) {
+        zeraReg(reg);
+        for (int i = 0; i < num; i++) {
+            reg.incrementa();
         }
-
     }
 
-    public void atribuir(int reg, int num, int div, int sinal) {//Testado e funcionando
-        this.regs.set(reg, atribui(this.regs.get(reg), num));
-        this.divs.set(reg, atribui(this.divs.get(reg), div));
-        this.sinais.set(reg, atribui(this.sinais.get(reg), sinal));
-    } 
+    private void somaRegAB(Registrador regA, Registrador regB) {
+        while (true) {
+            if (regB.isZero()) {
+                return;
+            }
 
-    //Itera o valor do registrador zerado até que ele chegue no valor desejado
-    private int atribui(int valorReg, int valor) {
-        valorReg = zera(valorReg);
-        for (int i = valor; i > 0; i--) {
-            valorReg++;
+            regA.incrementa();
+            regB.decrementa();
         }
-        return valor;
     }
 
-    public void somaAB(int reg1, int reg2) { //Testado e funcionando
-        int aux1, aux2;
-        aux1 = this.regs.get(reg1);
-        aux2 = this.regs.get(reg2);
-        if (this.sinais.get(reg1) == 0) {
-            if (this.sinais.get(reg2) == 0) {
-                //SOMA DE DOIS NUMEROS POSITIVOS
-                while (true) {  //Apenas decrementa o B e incrementa o A até que B seja 0
-                    if (aux2 == 0) {
-                        this.regs.set(reg1, aux1);
-                        this.regs.set(reg2, aux2);
+    private void somaRegABC(Registrador regA, Registrador regB, Registrador regC) {
+        zeraReg(regC);
+        while (true) {
+            if (regB.isZero()) {
+                break;
+            }
+            regB.decrementa();
+            regC.incrementa();
+        }
+
+        while (true) {
+            if (regC.isZero()) {
+                return;
+            }
+
+            regA.incrementa();
+            regB.incrementa();
+            regC.decrementa();
+        }
+    }
+
+    private void difRegAB(Registrador regA, Registrador regB) {
+        //Armazena em A a diferença (absoluta) entre A e B (perde o valor de B)
+
+        while (true) {
+            if (regB.isZero()) {
+                return;
+            }
+            if (regA.isZero()) {
+                while (true) {
+                    if (regB.isZero()) {
                         return;
                     }
-                    aux1++;
-                    aux2--;
-                }
-            } else// A positivo e B negativo
-            //|A| < |B|
-            {
-                if (this.AmenorB(aux1, aux2)) {
-                    while (true) { //Subtrai de A até que ele seja 0
-                        if (aux1 == 0) {
-                            while (true) {  //Soma em A no lado negativo da reta
-                                if (aux2 == 0) {
-                                    this.sinais.set(reg1, 1); // Mesma coisa que incrementar 1
-                                    this.sinais.set(reg2, 0); // Mesma coisa que decrementar 1
-                                    this.regs.set(reg1, aux1);
-                                    this.regs.set(reg2, aux2);
-                                    return;
-                                }
-                                aux1++;
-                                aux2--;
-                            }
-                        }
-                        aux1--;
-                        aux2--;
-                    }
-                    //|A| >= |B|
-                } else {
-                    while (true) { //Mesmo pensamento dos dois serem positivos
-                        if (aux2 == 0) {
-                            this.sinais.set(reg2, 0); // Mesma coisa que decrementar 1
-                            this.regs.set(reg1, aux1);
-                            this.regs.set(reg2, aux2);
-                            return;
-                        }
-                        aux1--;
-                        aux2--;
-                    }
+                    regA.incrementa();
+                    regB.decrementa();
                 }
             }
+            regA.decrementa();
+            regB.decrementa();
+        }
+    }
 
-        } else if (this.sinais.get(reg2) == 0) { // A é negativo e B Positivo
-            if (this.AmenorIgualB(aux1, aux2)) { //|A| <= |B|
+    private void difRegABC(Registrador regA, Registrador regB, Registrador regC) {
+        //Armazena a diferença absoluta entre A e B em A e utiliza C para recuperar o valor de B
+
+        zeraReg(regC);
+        while (true) {
+            if (regB.isZero()) {
                 while (true) {
-                    if (aux1 == 0) {
+                    if (regC.isZero()) {
+                        return;
+                    }
+
+                    regB.incrementa();
+                    regC.decrementa();
+                }
+            }
+            if (regA.isZero()) {
+                while (true) {
+                    if (regB.isZero()) {
                         while (true) {
-                            if (aux2 == 0) {
-                                this.sinais.set(reg1, 0); // Mesma coisa que decrementar 1
-                                this.regs.set(reg1, aux1);
-                                this.regs.set(reg2, aux2);
+                            if (regC.isZero()) {
                                 return;
                             }
-                            aux1++;
-                            aux2--;
+                            regB.incrementa();
+                            regC.decrementa();
                         }
                     }
-                    aux1--;
-                    aux2--;
+                    regB.decrementa();
+                    regA.incrementa();
+                    regC.incrementa();
                 }
-            } else {//|A| > |B|
-                while (true) {
-                    if (aux2 == 0) {
-                        this.regs.set(reg1, aux1);
-                        this.regs.set(reg2, aux2);
-                        return;
-                    }
-                    aux1--;
-                    aux2--;
-                }
-
             }
-
-        } else {
-            //SOMA DE DOIS NUMEROS NEGATIVOS
-            while (true) {
-                if (aux2 == 0) {
-                    this.regs.set(reg1, aux1);
-                    this.regs.set(reg2, aux2);
-                    this.sinais.set(reg2, 0); // mesmca coisa que decrementar
-                    return;
-                }
-                aux1++;
-                aux2--;
-            }
+            regA.decrementa();
+            regB.decrementa();
+            regC.incrementa();
         }
     }
 
-    public void somaABC(int reg1, int reg2, int reg3) { //Testado e funcionando
-        int aux1, aux2, aux3;
-        zerar(reg3);
-        aux1 = this.regs.get(reg1);
-        aux2 = this.regs.get(reg2);
-        aux3 = this.regs.get(reg3);
-
-        //Setar o mesmo valor do reg2 para o reg3, para ser usado no somaAB com reg2 e reg3
-        if (this.sinais.get(reg2) == 0) {
-            this.sinais.set(reg3, 0);
-        } else {
-            this.sinais.set(reg3, 1);
-        }
-
-        if (this.sinais.get(reg1) == 0) {
-            if (this.sinais.get(reg2) == 0) {
-                //A e B são positivos
+    private boolean AMenorIgualB(Registrador regA, Registrador regB) {
+        Registrador aux = new Registrador();
+        zeraReg(aux);
+        /* 
+        Variavel aux serve para recuperar o valor de A e B
+        Como a maquina tem "infinitos" registradores, simula um reg aleatorio
+         */
+        while (true) {
+            if (regA.isZero()) {
                 while (true) {
-                    if (aux2 == 0) {
-                        this.regs.set(reg1, aux1);
-                        this.regs.set(reg2, aux2);
-                        somaAB(reg2, reg3);
-                        return;
+                    if (aux.isZero()) {
+                        return true;
                     }
-                    aux3++;
-                    aux1++;
-                    aux2--;
-                }
-            } else { //A é positivo e B é negativo
-                if (AmenorB(aux1, aux2)) { //|A| < |B|
-                    while (true) {
-                        if (aux1 == 0) {
-                            while (true) {
-                                if (aux2 == 0) {
-                                    this.regs.set(reg1, aux1);
-                                    this.regs.set(reg2, aux2);
-                                    this.regs.set(reg3, aux3);
-                                    this.sinais.set(reg1, 1);
-                                    this.sinais.set(reg2, 0);
-                                    somaAB(reg2, reg3); //Volta o valor de reg2 ao original
-                                    return;
-                                }
-                                aux1++;
-                                aux2--;
-                                aux3++;
-                            }
-                        }
-                        aux1--;
-                        aux2--;
-                        aux3++;
-                    }
-                } else {   //|A| > |B|
-                    while (true) {
-                        if (aux2 == 0) {
-                            this.regs.set(reg1, aux1);
-                            this.regs.set(reg2, aux2);
-                            this.regs.set(reg3, aux3);
-                            this.sinais.set(reg2, 0);
-                            somaAB(reg2, reg3);
-                            return;
-                        }
-                        aux1--;
-                        aux2--;
-                        aux3++;
-                    }
+                    regA.incrementa();
+                    regB.incrementa();
+                    aux.decrementa();
                 }
             }
-        } else {
-            if (this.sinais.get(reg2) == 0) { //A é negativo e B é positivo
-                if (AmenorIgualB(aux1, aux2)) { //|A| <= |B|
-                    while (true) {
-                        if (aux1 == 0) {
-                            while (true) {
-                                if (aux2 == 0) {
-                                    this.regs.set(reg1, aux1);
-                                    this.regs.set(reg2, aux2);
-                                    this.regs.set(reg3, aux3);
-                                    this.sinais.set(reg1, 0);
-                                    somaAB(reg2, reg3); //Volta o valor de reg2 ao original
-                                    return;
-                                }
-                                aux1++;
-                                aux2--;
-                                aux3++;
-                            }
-                        }
-                        aux1--;
-                        aux2--;
-                        aux3++;
-                    }
-                } else {    //|A| > |B|
-                    while (true) {
-                        if (aux2 == 0) {
-                            this.regs.set(reg1, aux1);
-                            this.regs.set(reg2, aux2);
-                            this.regs.set(reg3, aux3);
-                            somaAB(reg2, reg3); //Volta o valor de reg2 ao original
-                            return;
-                        }
-                        aux1--;
-                        aux2--;
-                        aux3++;
-                    }
-                }
-            } else {   //A e B são negativos
+            if (regB.isZero()) {
                 while (true) {
-                    if (aux2 == 0) {
-                        this.regs.set(reg1, aux1);
-                        this.regs.set(reg2, aux2);
-                        this.regs.set(reg3, aux3);
-                        this.sinais.set(reg2, 0);
-                        somaAB(reg2, reg3); //Volta o valor de reg2 ao original
-                        return;
+                    if (aux.isZero()) {
+                        return false;
                     }
-                    aux1++;
-                    aux2--;
-                    aux3++;
+                    regA.incrementa();
+                    regB.incrementa();
+                    aux.decrementa();
                 }
             }
+            regA.decrementa();
+            regB.decrementa();
+            aux.incrementa();
         }
     }
 
-    public void atribuirABC(int reg1, int reg2, int reg3) {
-        zerar(reg1);
-        this.somaABC(reg1, reg2, reg3);
-        if (this.sinais.get(reg2) == 0) {
-            return;
+    private boolean AMenorB(Registrador regA, Registrador regB) {
+        Registrador aux = new Registrador();
+        zeraReg(aux);
+        /* 
+        A diferença entre Menor e Menor igual é que o B é verificado primeiro.
+        Se o B for verificado como zero, mesmo que A seja 0 ele já da falso, pois se os dois
+        chegaram a zero ao mesmo tempo, não é menor.
+         */
+        while (true) {
+            if (regB.isZero()) {
+                while (true) {
+                    if (aux.isZero()) {
+                        return false;
+                    }
+                    regA.incrementa();
+                    regB.incrementa();
+                    aux.decrementa();
+                }
+            }
+            if (regA.isZero()) {
+                while (true) {
+                    if (aux.isZero()) {
+                        return true;
+                    }
+                    regA.incrementa();
+                    regB.incrementa();
+                    aux.decrementa();
+                }
+            }
+
+            regA.decrementa();
+            regB.decrementa();
+            aux.incrementa();
         }
-        int aux = this.sinais.get(reg1);
-        aux--;
-        this.sinais.set(reg1, aux);
     }
+
+    private void atribuirRegABC(Registrador reg1, Registrador reg2, Registrador reg3) {
+        this.zeraReg(reg1);
+        this.somaRegABC(reg1, reg2, reg3);
+    }
+
 
 //    public void multiplicaAB_CD(int reg1, int reg2, int reg3, int reg4) {
 //        zerar(reg3);
@@ -325,36 +235,121 @@ public class Maquina {
 //            }
 //        }
 //    }
-    //Decrementa ambos os valores, aquele que chegar em 0 primeiro é o menor
-    //Ou, se chegarem juntos, nenhum é menor
-    public boolean AmenorB(int valorA, int valorB) {
-        while (true) {
-            if (valorA == 0) {
-                if (valorB == 0) {
-                    return false;
-                } else {
-                    return true;
+    
+    public void zerarNum(int pos) {
+        Registrador aux = this.regs.get(pos); // Pega o valor do registrador do conjunto de registadores
+        // Processamento no registrador
+        zeraReg(aux);
+        // Normaliza o divisor
+        aux = this.divs.get(pos);
+        zeraReg(aux);
+        aux.incrementa();
+
+        //Verifica o sinal.
+        aux = this.sinais.get(pos);
+        if (aux.isZero()) {
+            return;
+        }
+        aux.decrementa();
+    }
+
+    public void atribuir(int pos, int num, int div, int sinal) {//Testado e funcionando
+        Registrador regDiv, regNum, regSin;
+
+        regNum = this.regs.get(pos);
+        regSin = this.sinais.get(pos);
+        regDiv = this.divs.get(pos);
+
+        this.atribuiReg(regNum, num);
+        this.atribuiReg(regSin, sinal);
+        this.atribuiReg(regDiv, div);
+    }
+
+    public void somaNumAB(int pos1, int pos2) {
+        //Soma A e B e armazena resultado em A
+        Registrador regA, regB, sinalA, sinalB;
+        regA = this.regs.get(pos1);
+        regB = this.regs.get(pos2);
+        sinalA = this.sinais.get(pos1);
+        sinalB = this.sinais.get(pos2);
+        if (sinalA.isZero()) {
+            if (sinalB.isZero()) {
+                //SOMA DE DOIS NUMEROS POSITIVOS
+                this.somaRegAB(regA, regB);
+            } else {
+                // A positivo e B negativo
+                this.difRegAB(regA, regB);
+                sinalB.decrementa(); // B fica zero depois dessa operação
+                if (this.AMenorB(regA, regB)) {
+                    //Se |A| < |B|, então A fica negativo
+                    sinalA.incrementa();
                 }
             }
-            if (valorB == 0) {
-                return false;
+        } else if (sinalB.isZero()) {
+            // A é negativo e B Positivo
+            this.difRegAB(regA, regB);
+            if (this.AMenorIgualB(regA, regB)) {
+                //|A| <= |B|
+                sinalA.decrementa();
             }
-            valorA--;
-            valorB--;
+
+        } else {
+            //SOMA DE DOIS NUMEROS NEGATIVOS, sinais ficam iguais
+            this.somaRegAB(regA, regB);
+
         }
     }
 
-    //Praticamente o memso pensamento
-    public boolean AmenorIgualB(int valorA, int valorB) {
-        while (true) {
-            if (valorA == 0) {
-                return true;
+    public void somaNumABC(int pos1, int pos2, Registrador regC) {
+        //Soma A e B e armazena resultado em A
+        Registrador regA, regB, sinalA, sinalB;
+        regA = this.regs.get(pos1);
+        regB = this.regs.get(pos2);
+        sinalA = this.sinais.get(pos1);
+        sinalB = this.sinais.get(pos2);
+        if (sinalA.isZero()) {
+            if (sinalB.isZero()) {
+                //SOMA DE DOIS NUMEROS POSITIVOS
+                this.somaRegABC(regA, regB, regC);
+            } else {
+                // A positivo e B negativo
+                this.difRegABC(regA, regB, regC);
+                if (this.AMenorB(regA, regB)) {
+                    //Se |A| < |B|, então A fica negativo
+                    sinalA.incrementa();
+                }
             }
-            if (valorB == 0) {
-                return false;
+        } else if (sinalB.isZero()) {
+            // A é negativo e B Positivo
+            this.difRegABC(regA, regB, regC);
+            if (this.AMenorIgualB(regA, regB)) {
+                //|A| <= |B|
+                sinalA.decrementa();
             }
-            valorA--;
-            valorB--;
+
+        } else {
+            //SOMA DE DOIS NUMEROS NEGATIVOS, sinais ficam iguais
+            this.somaRegABC(regA, regB, regC);
+
         }
+    }
+
+    public void atribuirNumABC(int pos1, int pos2, int pos3) {
+        Registrador regA, regB, regC;
+        Registrador sinalA, sinalB;
+
+        regA = this.regs.get(pos1);
+        regB = this.regs.get(pos2);
+        regC = this.regs.get(pos3);
+
+        sinalA = this.sinais.get(pos1);
+        sinalB = this.sinais.get(pos2);
+        this.atribuirRegABC(regA, regB, regC);
+        
+        this.zeraReg(sinalA);
+        if (sinalB.isZero()) {
+            return;
+        }
+        sinalA.incrementa();
     }
 }
