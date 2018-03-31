@@ -200,6 +200,11 @@ public class Principal extends javax.swing.JFrame {
         });
 
         jButton_atri_B.setText("Atribuir à B");
+        jButton_atri_B.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_atri_BActionPerformed(evt);
+            }
+        });
 
         jButton_somaAB.setText("A +B");
         jButton_somaAB.addActionListener(new java.awt.event.ActionListener() {
@@ -209,14 +214,39 @@ public class Principal extends javax.swing.JFrame {
         });
 
         jButton_somaABC.setText("A + B Usando C");
+        jButton_somaABC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_somaABCActionPerformed(evt);
+            }
+        });
 
         jButton_multAB.setText("A x B");
+        jButton_multAB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_multABActionPerformed(evt);
+            }
+        });
 
         jButton_primo.setText("A é Primo");
+        jButton_primo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_primoActionPerformed(evt);
+            }
+        });
 
         jButton_restoAB.setText("Resto de A / B");
+        jButton_restoAB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_restoABActionPerformed(evt);
+            }
+        });
 
         jButton_fatorial.setText("Fatorial de A = 5");
+        jButton_fatorial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_fatorialActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -307,6 +337,30 @@ public class Principal extends javax.swing.JFrame {
     private void jButton_somaABActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_somaABActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton_somaABActionPerformed
+
+    private void jButton_atri_BActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_atri_BActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton_atri_BActionPerformed
+
+    private void jButton_somaABCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_somaABCActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton_somaABCActionPerformed
+
+    private void jButton_multABActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_multABActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton_multABActionPerformed
+
+    private void jButton_primoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_primoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton_primoActionPerformed
+
+    private void jButton_restoABActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_restoABActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton_restoABActionPerformed
+
+    private void jButton_fatorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_fatorialActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton_fatorialActionPerformed
 
     /**
      * @param args the command line arguments

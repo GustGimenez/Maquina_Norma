@@ -361,6 +361,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Atribuir &#xe0; B"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_atri_BActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton_somaAB">
           <Properties>
@@ -374,26 +377,41 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="A + B Usando C"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_somaABCActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton_multAB">
           <Properties>
             <Property name="text" type="java.lang.String" value="A x B"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_multABActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton_primo">
           <Properties>
             <Property name="text" type="java.lang.String" value="A &#xe9; Primo"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_primoActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton_restoAB">
           <Properties>
             <Property name="text" type="java.lang.String" value="Resto de A / B"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_restoABActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton_fatorial">
           <Properties>
             <Property name="text" type="java.lang.String" value="Fatorial de A = 5"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_fatorialActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
