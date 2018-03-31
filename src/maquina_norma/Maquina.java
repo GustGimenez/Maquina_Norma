@@ -273,30 +273,46 @@ public class Maquina {
 
     public void somaNumAB(int pos1, int pos2) {
         //Soma A e B e armazena resultado em A
-        Registrador regA, regB, sinalA, sinalB;
+        Registrador regA, regB, divA, divB, sinalA, sinalB;
+        Registrador auxC, auxD; // Auxxiliar na multiplicação
         regA = this.regs.get(pos1);
         regB = this.regs.get(pos2);
+        divA = this.divs.get(pos1);
+        divB = this.divs.get(pos2);
         sinalA = this.sinais.get(pos1);
         sinalB = this.sinais.get(pos2);
+
+        auxC = new Registrador();
+        auxD = new Registrador();
+        // Regra de multiplicação de fração
+        this.multiplicaRegACBD(regA, divB, auxC, auxD);
+        this.multiplicaRegACBD(regB, divA, auxC, auxD);
+        this.multiplicaRegACBD(divA, divB, auxC, auxD);
+
+        //Soma dos resultados e ajuste de sinal
         if (sinalA.isZero()) {
             if (sinalB.isZero()) {
                 //SOMA DE DOIS NUMEROS POSITIVOS
                 this.somaRegAB(regA, regB);
-            } else {
-                // A positivo e B negativo
-                this.difRegAB(regA, regB);
-                sinalB.decrementa(); // B fica zero depois dessa operação
+            } else // A positivo e B negativo
+            {
                 if (this.AMenorB(regA, regB)) {
                     //Se |A| < |B|, então A fica negativo
+                    this.difRegAB(regA, regB);
                     sinalA.incrementa();
+                } else {
+                    this.difRegAB(regA, regB);
                 }
             }
         } else if (sinalB.isZero()) {
             // A é negativo e B Positivo
-            this.difRegAB(regA, regB);
+
             if (this.AMenorIgualB(regA, regB)) {
                 //|A| <= |B|
+                this.difRegAB(regA, regB);
                 sinalA.decrementa();
+            } else {
+                this.difRegAB(regA, regB);
             }
 
         } else {
@@ -304,55 +320,77 @@ public class Maquina {
             this.somaRegAB(regA, regB);
 
         }
+
+        sinalB.decrementa(); // B fica zero depois dessa operação
     }
 
     public void somaNumABC(int pos1, int pos2, int pos3) {
         //Soma A e B e armazena resultado em A
-        Registrador regA, regB, regC, sinalA, sinalB;
+        Registrador regA, regB, regC, divA, divB, sinalA, sinalB;
+        Registrador auxB, auxC, auxD;
         regA = this.regs.get(pos1);
         regB = this.regs.get(pos2);
         regC = this.regs.get(pos3);
         sinalA = this.sinais.get(pos1);
         sinalB = this.sinais.get(pos2);
+        divA = this.divs.get(pos1);
+        divB = this.divs.get(pos2);
+
+        auxB = new Registrador();
+        auxC = new Registrador();
+        auxD = new Registrador();
+        //Regra de operacao com fração
+        this.atribuirRegABC(auxB, divA, regC);
+
+        this.multiplicaRegACBD(regA, divB, auxC, auxD);
+        this.multiplicaRegACBD(auxB, regB, auxC, auxD);
+        this.multiplicaRegACBD(divA, divB, auxC, auxD);
         if (sinalA.isZero()) {
             if (sinalB.isZero()) {
                 //SOMA DE DOIS NUMEROS POSITIVOS
-                this.somaRegABC(regA, regB, regC);
-            } else {
-                // A positivo e B negativo
-                this.difRegABC(regA, regB, regC);
-                if (this.AMenorB(regA, regB)) {
+                this.somaRegABC(regA, auxB, regC);
+            } else // A positivo e B negativo
+             if (this.AMenorB(regA, auxB)) {
                     //Se |A| < |B|, então A fica negativo
+                    this.difRegABC(regA, auxB, regC);
                     sinalA.incrementa();
+                } else {
+                    this.difRegABC(regA, auxB, regC);
                 }
-            }
         } else if (sinalB.isZero()) {
             // A é negativo e B Positivo
-            this.difRegABC(regA, regB, regC);
-            if (this.AMenorIgualB(regA, regB)) {
+
+            if (this.AMenorIgualB(regA, auxB)) {
                 //|A| <= |B|
+                this.difRegABC(regA, auxB, regC);
                 sinalA.decrementa();
+            } else {
+                this.difRegABC(regA, auxB, regC);
             }
 
         } else {
             //SOMA DE DOIS NUMEROS NEGATIVOS, sinais ficam iguais
-            this.somaRegABC(regA, regB, regC);
+            this.somaRegABC(regA, auxB, regC);
 
         }
     }
 
     public void atribuirNumABC(int pos1, int pos2, int pos3) {
-        Registrador regA, regB, regC;
+        Registrador regA, regB, regC, divA, divB;
         Registrador sinalA, sinalB;
 
         regA = this.regs.get(pos1);
         regB = this.regs.get(pos2);
         regC = this.regs.get(pos3);
 
+        divA = this.divs.get(pos1);
+        divB = this.divs.get(pos2);
+
         sinalA = this.sinais.get(pos1);
         sinalB = this.sinais.get(pos2);
-        this.atribuirRegABC(regA, regB, regC);
 
+        this.atribuirRegABC(regA, regB, regC);
+        this.atribuirRegABC(divA, divB, regC);
         this.zeraReg(sinalA);
         if (sinalB.isZero()) {
             return;
@@ -361,7 +399,7 @@ public class Maquina {
     }
 
     public void multiplicaNumACBD(int pos1, int pos2, int pos3, int pos4) {
-        Registrador regA, regB, regC, regD;
+        Registrador regA, regB, regC, regD, divA, divB;
         Registrador sinalA, sinalB;
 
         regA = this.regs.get(pos1);
@@ -369,10 +407,14 @@ public class Maquina {
         regC = this.regs.get(pos3);
         regD = this.regs.get(pos4);
 
+        divA = this.divs.get(pos1);
+        divB = this.divs.get(pos2);
+
         sinalA = this.sinais.get(pos1);
         sinalB = this.sinais.get(pos2);
         this.multiplicaRegACBD(regA, regB, regC, regD);
-        
+        this.multiplicaRegACBD(divA, divB, regC, regD);
+
         if (sinalB.isZero()) {
             return;
         }
