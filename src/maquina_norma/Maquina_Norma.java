@@ -27,6 +27,6 @@ public class Maquina_Norma {
         int B = Integer.valueOf(input.readLine());
         valor = Integer.valueOf(input.readLine());
         maquina.atribuir(B, valor, 1, 1);
-        maquina.somaABC(A, B, 2);
+        maquina.somaNumABC(A, B, 2);
     }
 }
