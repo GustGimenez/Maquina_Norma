@@ -372,7 +372,7 @@ public class Maquina {
         sinalA = this.sinais.get(pos1);
         sinalB = this.sinais.get(pos2);
         this.multiplicaRegACBD(regA, regB, regC, regD);
-
+        
         if (sinalB.isZero()) {
             return;
         }
