@@ -10,25 +10,29 @@ package maquina_norma;
  * @author fabio
  */
 public class Registrador {
+
     private int valor;
-            
-    public Registrador(){
-        this.valor  = 0;
+
+    public Registrador() {
+        this.valor = 0;
     }
-    
-    public int getValor(){
+
+    public int getValor() {
         return this.valor;
     }
-    
-    public boolean isZero(){
+
+    public boolean isZero() {
         return this.valor == 0;
     }
-    
-    public void incrementa(){
+
+    public void incrementa() {
         this.valor++;
     }
-    
-    public void decrementa(){
-        this. valor--;
+
+    public void decrementa() {
+        if (this.isZero()) {
+            return;
+        }
+        this.valor--;
     }
 }
