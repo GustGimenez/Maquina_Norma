@@ -23,10 +23,12 @@ public class Maquina_Norma {
         Maquina maquina = new Maquina();
         int A = Integer.valueOf(input.readLine());
         int valor = Integer.valueOf(input.readLine());
-        maquina.atribuir(A, valor, 1, 1);
+        maquina.atribuir(A, valor, 2, 0);
         int B = Integer.valueOf(input.readLine());
         valor = Integer.valueOf(input.readLine());
-        maquina.atribuir(B, valor, 1, 1);
+        maquina.atribuir(B, valor, 3, 1);
         maquina.somaNumABC(A, B, 2);
+        
+        System.out.println("Pausa");
     }
 }
