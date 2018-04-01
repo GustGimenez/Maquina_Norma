@@ -35,11 +35,11 @@ public class Controlador {
     D -> 3
     */
     public void atribuirA(int valor, int sinal, int div){
-        this.maquina.atribuir(0, div, div, sinal);  
+        this.maquina.atribuir(0, valor, div, sinal);  
     }
     
     public void atribuirB(int valor, int sinal, int div){
-        this.maquina.atribuir(1, div, div, sinal);
+        this.maquina.atribuir(1, valor, div, sinal);
     }
     
     public void somaAB(){
