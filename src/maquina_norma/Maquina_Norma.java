@@ -21,13 +21,14 @@ public class Maquina_Norma {
         // TODO code application logic here
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         Maquina maquina = new Maquina();
-        int A = Integer.valueOf(input.readLine());
+        
         int valor = Integer.valueOf(input.readLine());
-        maquina.atribuir(A, valor, 2, 0);
-        int B = Integer.valueOf(input.readLine());
+        maquina.atribuir(0, valor, 1, 0);
+        
         valor = Integer.valueOf(input.readLine());
-        maquina.atribuir(B, valor, 3, 1);
-        maquina.somaNumABC(A, B, 2);
+        maquina.atribuir(1, valor, 1, 0);
+        
+        maquina.divideNumIntABCD(0, 1, 2, 3);
         
         System.out.println("Pausa");
     }

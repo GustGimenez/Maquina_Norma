@@ -53,5 +53,9 @@ public class Controlador {
     public void multAB(){
         this.maquina.multiplicaNumACBD(0, 1, 2, 3);
     }
+    
+    public void divAB(){
+        this.maquina.divideNumIntABCD(0, 1, 2, 3);
+    }
         
 }

@@ -241,6 +241,31 @@ public class Maquina {
 
     }
 
+    private void divideRegIntABCD(Registrador regA, Registrador regB, Registrador regC, Registrador regD) {
+        this.zeraReg(regC);
+        this.zeraReg(regD);
+        Registrador regAux = new Registrador();
+        while (true) {
+            //A divisão inteira para quando quando o dividendo for menor que o divisor
+            if (this.AMenorB(regA, regB)) {
+                break;
+            } else {   
+                //RegD é usado como auxiliar para decrementar o dividendo
+                this.atribuirRegABC(regD, regB, regAux);
+                while (true) {
+                    if (regD.isZero()) {
+                        break;
+                    }
+                    regA.decrementa();
+                    regD.decrementa();
+                }
+                //RegC é àquele que guarda o resultado da divisão
+                regC.incrementa();
+            }
+        }
+        //Da pra fazer um método de resto e chamar aqui...
+    }
+
     // Operação com NUMEROS
     public void zerarNum(int pos) {
         Registrador aux = this.regs.get(pos); // Pega o valor do registrador do conjunto de registadores
@@ -322,6 +347,8 @@ public class Maquina {
         }
 
         sinalB.decrementa(); // B fica zero depois dessa operação
+        this.regs.get(0).getValor();
+        this.regs.get(1).getValor();
     }
 
     public void somaNumABC(int pos1, int pos2, int pos3) {
@@ -350,13 +377,13 @@ public class Maquina {
                 //SOMA DE DOIS NUMEROS POSITIVOS
                 this.somaRegABC(regA, auxB, regC);
             } else // A positivo e B negativo
-             if (this.AMenorB(regA, auxB)) {
-                    //Se |A| < |B|, então A fica negativo
-                    this.difRegABC(regA, auxB, regC);
-                    sinalA.incrementa();
-                } else {
-                    this.difRegABC(regA, auxB, regC);
-                }
+            if (this.AMenorB(regA, auxB)) {
+                //Se |A| < |B|, então A fica negativo
+                this.difRegABC(regA, auxB, regC);
+                sinalA.incrementa();
+            } else {
+                this.difRegABC(regA, auxB, regC);
+            }
         } else if (sinalB.isZero()) {
             // A é negativo e B Positivo
 
@@ -424,5 +451,37 @@ public class Maquina {
         } else {
             sinalA.decrementa();
         }
+    }
+
+    public void divideNumIntABCD(int pos1, int pos2, int pos3, int pos4) {
+        Registrador regA, regB, regC, regD, sinalA, sinalB, sinalC;
+
+        regA = this.regs.get(pos1); //Devidendo
+        regB = this.regs.get(pos2); //Divisor
+        regC = this.regs.get(pos3); //Resultado
+        regD = this.regs.get(pos4); //Auxiliador
+
+        sinalA = this.sinais.get(pos1);
+        sinalB = this.sinais.get(pos2);
+        sinalC = this.sinais.get(pos3);
+
+        this.divideRegIntABCD(regA, regB, regC, regD);
+        
+        //A for positivo e B negativo C é negativo
+        if (sinalA.isZero()) {
+            if (!sinalB.isZero()) {
+                sinalC.incrementa();
+            }
+        } else { //A for negativo e B positivo C é negativo
+            if (sinalB.isZero()) {
+                sinalC.incrementa();
+            }
+        }
+        
+        this.regs.get(0).getValor();
+        this.regs.get(1).getValor();
+        this.regs.get(2).getValor();
+        this.regs.get(3).getValor();
+        return;
     }
 }

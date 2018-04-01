@@ -397,6 +397,25 @@ public class Principal extends javax.swing.JFrame {
 
     private void jButton_somaABActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_somaABActionPerformed
         // TODO add your handling code here:
+        this.controlador.somaAB();
+        
+        int[] auxA = this.controlador.getInfosReg(0); //Informações do Reg A para a tabela
+        float reg = (float) auxA[0] / (float) auxA[2];
+        if(auxA[1] == 1)
+            reg *= -1;
+        this.linha[1] = reg;
+        
+        int[] auxB = this.controlador.getInfosReg(1); //Informações do Reg B para a tabela
+        reg = (float) auxB[0] / (float) auxB[2];
+        if(auxB[1] == 1)
+            reg *= -1;
+        this.linha[2] = reg;
+        
+        //Adicona a linha na tabela
+        this.linha[0] = "A + B"; //Operação
+        
+        this.table.addRow(linha);
+        
     }//GEN-LAST:event_jButton_somaABActionPerformed
 
     private void jButton_atri_BActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_atri_BActionPerformed
@@ -430,10 +449,52 @@ public class Principal extends javax.swing.JFrame {
 
     private void jButton_somaABCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_somaABCActionPerformed
         // TODO add your handling code here:
+         this.controlador.somaABC();
+        
+        int[] auxA = this.controlador.getInfosReg(0); //Informações do Reg A para a tabela
+        float reg = (float) auxA[0] / (float) auxA[2];
+        if(auxA[1] == 1)
+            reg *= -1;
+        this.linha[1] = reg;
+        
+        int[] auxB = this.controlador.getInfosReg(1); //Informações do Reg B para a tabela
+        reg = (float) auxB[0] / (float) auxB[2];
+        if(auxB[1] == 1)
+            reg *= -1;
+        this.linha[2] = reg;
+        
+        int[] auxC = this.controlador.getInfosReg(1); //Informações do Reg C para a tabela
+        reg = (float) auxC[0] / (float) auxC[2];
+        if(auxC[1] == 1)
+            reg *= -1;
+        this.linha[3] = reg;
+        
+        //Adicona a linha na tabela
+        this.linha[0] = "A + B com C"; //Operação
+        
+        this.table.addRow(linha);
     }//GEN-LAST:event_jButton_somaABCActionPerformed
 
     private void jButton_multABActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_multABActionPerformed
         // TODO add your handling code here:
+        this.controlador.multAB();
+        
+        int[] auxA = this.controlador.getInfosReg(0); //Informações do Reg A para a tabela
+        float reg = (float) auxA[0] / (float) auxA[2];
+        if(auxA[1] == 1)
+            reg *= -1;
+        this.linha[1] = reg;
+        
+        int[] auxB = this.controlador.getInfosReg(1); //Informações do Reg B para a tabela
+        reg = (float) auxB[0] / (float) auxB[2];
+        if(auxB[1] == 1)
+            reg *= -1;
+        this.linha[2] = reg;
+        
+        //Adicona a linha na tabela
+        this.linha[0] = "A x B"; //Operação
+        
+        this.table.addRow(linha);
     }//GEN-LAST:event_jButton_multABActionPerformed
 
     private void jButton_primoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_primoActionPerformed
