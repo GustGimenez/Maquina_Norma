@@ -385,7 +385,7 @@ public class Principal extends javax.swing.JFrame {
         this.controlador.atribuirA(valor, sinal, divisor);
         int[] aux = this.controlador.getInfosReg(0); //Informações do Reg A para a tabela
         //"Forma" o valor do registrador a partir das informações dos 3 objetos Registradores
-        float regA = (float)(aux[0] / aux[2]);
+        float regA = (float) aux[0] / (float) aux[2];
         if(aux[1] == 1)
             regA *= -1;
         
