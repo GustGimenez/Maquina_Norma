@@ -206,7 +206,7 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        jButton_somaAB.setText("A +B");
+        jButton_somaAB.setText("A + B");
         jButton_somaAB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton_somaABActionPerformed(evt);
