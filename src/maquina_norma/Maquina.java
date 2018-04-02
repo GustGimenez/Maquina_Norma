@@ -263,7 +263,22 @@ public class Maquina {
                 regC.incrementa();
             }
         }
-        //Da pra fazer um método de resto e chamar aqui...
+    }
+    
+    private void fatorialRegAB(Registrador regA, Registrador regB){
+        Registrador reg1, reg2; //Auxiliares para a multiplicação
+        reg1 = new Registrador();
+        reg2 = new Registrador();
+        this.zeraReg(reg1);
+        this.zeraReg(reg2);
+        
+        while(true){
+            if(regA.isZero()){
+                break;
+            }
+            this.multiplicaRegACBD(regB, regA, reg1, reg2);
+            regA.decrementa();
+        }
     }
 
     // Operação com NUMEROS
@@ -478,10 +493,17 @@ public class Maquina {
             }
         }
         
-        this.regs.get(0).getValor();
-        this.regs.get(1).getValor();
-        this.regs.get(2).getValor();
-        this.regs.get(3).getValor();
         return;
+    }
+    
+    public void fatorialNumAB(int pos1, int pos2){
+        Registrador regA, regB;
+        
+        regA = this.regs.get(pos1);
+        regB = this.regs.get(pos2);
+        this.atribuiReg(regA, 5);
+        this.atribuiReg(regB, 1);
+        
+        this.fatorialRegAB(regA, regB);
     }
 }
