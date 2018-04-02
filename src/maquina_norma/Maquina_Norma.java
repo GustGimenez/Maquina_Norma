@@ -19,9 +19,10 @@ public class Maquina_Norma {
      */
     public static void main(String[] args) throws IOException {
         // TODO code application logic here
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         Maquina maquina = new Maquina();
         
-        maquina.fatorialNumAB(0, 1);
+        maquina.atribuir(0, 25, 10, 0);
+        maquina.atribuir(1, 2, 1, 0);
+        //maquina.divideNumReaisAB(0, 1);
     }
 }
