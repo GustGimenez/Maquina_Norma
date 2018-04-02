@@ -13,22 +13,23 @@ import javax.swing.table.DefaultTableModel;
  * @author Gustavo
  */
 public class Principal extends javax.swing.JFrame {
+
     private Controlador controlador;
     private boolean tipoNum;    //True = inteiros, False = reais
     private CardLayout panelAtual;
     private DefaultTableModel table;
     private int contLinhasTabela;
     private Object[] linha; //Guarda a ultima linha da tabela
-    
+
     public Principal() {
         initComponents();
         this.controlador = new Controlador();
-        
+
         //Inicializando o cardlayout, para trocar entre os JPanels
         this.tipoNum = true;
         this.panelAtual = (CardLayout) this.jPanel_valores_ops_principal.getLayout();
         this.panelAtual.show(this.jPanel_valores_ops_principal, "Jpanel_inteiros");
-        
+
         //Inicializa primeira linha da tabela
         this.table = (DefaultTableModel) this.jTable_regs.getModel();
         this.linha = new Object[5];
@@ -38,6 +39,17 @@ public class Principal extends javax.swing.JFrame {
         linha[3] = "n/a";       //Reg C
         linha[4] = "n/a";       //Reg D
         this.table.addRow(linha);   //Adiciona a linha na tabela
+    }
+
+    public void formaLinha(int[] regs) {
+        int[] aux;
+
+        for (int i = 0; i < regs.length; i++) {
+            aux = this.controlador.getInfosReg(regs[i]);
+            this.linha[regs[i] + 1] = "(" + aux[1] + ", " + aux[0] + ", " + aux[2] + ")";
+        }
+
+        this.table.addRow(this.linha);
     }
 
     /**
@@ -375,132 +387,82 @@ public class Principal extends javax.swing.JFrame {
     private void jButton_atri_AActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_atri_AActionPerformed
         // TODO add your handling code here:
         int valor, sinal, divisor;
-        
+
         //Se estiver trabalhando com números inteiros
-        if(this.tipoNum){
+        if (this.tipoNum) {
             valor = Integer.valueOf(this.jTextField_valor_int.getText());
             sinal = Integer.valueOf(this.jTextField_sinal_int.getText());
             divisor = 1;
         }//Se estiver trabalhando com números reais
-        else{
+        else {
             valor = Integer.valueOf(this.jTextField_valor_reais.getText());
             sinal = Integer.valueOf(this.jTextField_sinal_reais.getText());
             divisor = Integer.valueOf(this.jTextField_divisor.getText());
         }
-        
+
         this.controlador.atribuirA(valor, sinal, divisor);
-        int[] aux = this.controlador.getInfosReg(0); //Informações do Reg A para a tabela
-        //"Forma" o valor do registrador a partir das informações dos 3 objetos Registradores
-        float regA = (float) aux[0] / (float) aux[2];
-        if(aux[1] == 1)
-            regA *= -1;
-        
-        //Adicona a linha na tabela
-        this.linha[0] = "Atribuição A"; //Operação
-        this.linha[1] = regA;
-        this.table.addRow(linha);
+        this.linha[0] = "Atribuição A";
+        int[] regs = new int[1];
+        regs[0] = 0;
+        this.formaLinha(regs);
     }//GEN-LAST:event_jButton_atri_AActionPerformed
 
     private void jButton_somaABActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_somaABActionPerformed
         // TODO add your handling code here:
         this.controlador.somaAB();
-        
-        int[] auxA = this.controlador.getInfosReg(0); //Informações do Reg A para a tabela
-        float reg = (float) auxA[0] / (float) auxA[2];
-        if(auxA[1] == 1)
-            reg *= -1;
-        this.linha[1] = reg;
-        
-        int[] auxB = this.controlador.getInfosReg(1); //Informações do Reg B para a tabela
-        reg = (float) auxB[0] / (float) auxB[2];
-        if(auxB[1] == 1)
-            reg *= -1;
-        this.linha[2] = reg;
-        
-        //Adicona a linha na tabela
+
+        int[] regs = new int[2]; //Informações do Reg A para a tabela
         this.linha[0] = "A + B"; //Operação
-        
-        this.table.addRow(linha);
-        
+        regs[0] = 0;
+        regs[1] = 1;
+        this.formaLinha(regs);
     }//GEN-LAST:event_jButton_somaABActionPerformed
 
     private void jButton_atri_BActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_atri_BActionPerformed
         // TODO add your handling code here:
         int valor, sinal, divisor;
-        
+
         //Se estiver trabalhando com números inteiros
-        if(this.tipoNum){
+        if (this.tipoNum) {
             valor = Integer.valueOf(this.jTextField_valor_int.getText());
             sinal = Integer.valueOf(this.jTextField_sinal_int.getText());
             divisor = 1;
         }//Se estiver trabalhando com números reais
-        else{
+        else {
             valor = Integer.valueOf(this.jTextField_valor_reais.getText());
             sinal = Integer.valueOf(this.jTextField_sinal_reais.getText());
             divisor = Integer.valueOf(this.jTextField_divisor.getText());
         }
-        
+
         this.controlador.atribuirB(valor, sinal, divisor);
-        int[] aux = this.controlador.getInfosReg(1); //Informações do Reg A para a tabela
-        //"Forma" o valor do registrador a partir das informações dos 3 objetos Registradores
-        float regA = (float)(aux[0] / aux[2]);
-        if(aux[1] == 1)
-            regA *= -1;
-        
-        //Adicona a linha na tabela
         this.linha[0] = "Atribuição B"; //Operação
-        this.linha[2] = regA;
-        this.table.addRow(linha);
+        int[] regs = new int[1];
+        regs[0] = 1;
+        this.formaLinha(regs);
     }//GEN-LAST:event_jButton_atri_BActionPerformed
 
     private void jButton_somaABCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_somaABCActionPerformed
         // TODO add your handling code here:
-         this.controlador.somaABC();
-        
-        int[] auxA = this.controlador.getInfosReg(0); //Informações do Reg A para a tabela
-        float reg = (float) auxA[0] / (float) auxA[2];
-        if(auxA[1] == 1)
-            reg *= -1;
-        this.linha[1] = reg;
-        
-        int[] auxB = this.controlador.getInfosReg(1); //Informações do Reg B para a tabela
-        reg = (float) auxB[0] / (float) auxB[2];
-        if(auxB[1] == 1)
-            reg *= -1;
-        this.linha[2] = reg;
-        
-        int[] auxC = this.controlador.getInfosReg(1); //Informações do Reg C para a tabela
-        reg = (float) auxC[0] / (float) auxC[2];
-        if(auxC[1] == 1)
-            reg *= -1;
-        this.linha[3] = reg;
-        
-        //Adicona a linha na tabela
-        this.linha[0] = "A + B com C"; //Operação
-        
-        this.table.addRow(linha);
+        this.controlador.somaABC();
+
+        this.linha[0] = "A + B Com C"; //Operação
+        int[] regs = new int[3];
+        regs[0] = 0;
+        regs[1] = 1;
+        regs[2] = 2;
+        this.formaLinha(regs);
     }//GEN-LAST:event_jButton_somaABCActionPerformed
 
     private void jButton_multABActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_multABActionPerformed
         // TODO add your handling code here:
         this.controlador.multAB();
-        
-        int[] auxA = this.controlador.getInfosReg(0); //Informações do Reg A para a tabela
-        float reg = (float) auxA[0] / (float) auxA[2];
-        if(auxA[1] == 1)
-            reg *= -1;
-        this.linha[1] = reg;
-        
-        int[] auxB = this.controlador.getInfosReg(1); //Informações do Reg B para a tabela
-        reg = (float) auxB[0] / (float) auxB[2];
-        if(auxB[1] == 1)
-            reg *= -1;
-        this.linha[2] = reg;
-        
-        //Adicona a linha na tabela
+
         this.linha[0] = "A x B"; //Operação
-        
-        this.table.addRow(linha);
+        int[] regs = new int[3];
+        regs[0] = 0;
+        regs[1] = 1;
+        regs[2] = 2;
+        this.formaLinha(regs);
     }//GEN-LAST:event_jButton_multABActionPerformed
 
     private void jButton_primoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_primoActionPerformed
@@ -510,49 +472,25 @@ public class Principal extends javax.swing.JFrame {
     private void jButton_restoABActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_restoABActionPerformed
         // TODO add your handling code here:
         this.controlador.divAB();
-        
-        int[] auxA = this.controlador.getInfosReg(0); //Informações do Reg A para a tabela
-        float reg = (float) auxA[0] / (float) auxA[2];
-        if(auxA[1] == 1)
-            reg *= -1;
-        this.linha[1] = reg;
-        
-        int[] auxB = this.controlador.getInfosReg(1); //Informações do Reg B para a tabela
-        reg = (float) auxB[0] / (float) auxB[2];
-        if(auxB[1] == 1)
-            reg *= -1;
-        this.linha[2] = reg;
-        
-        int[] auxC = this.controlador.getInfosReg(2); //Informações do Reg C para a tabela
-        reg = (float) auxC[0] / (float) auxC[2];
-        if(auxC[1] == 1)
-            reg *= -1;
-        this.linha[3] = reg;
-        
-        this.linha[0] = "A / B"; //Operação
-        //Adicona a linha na tabela
-        this.table.addRow(linha);
+
+        this.linha[0] = "Resto A / B"; //Operação
+        int[] regs = new int[4];
+        regs[0] = 0;
+        regs[1] = 1;
+        regs[2] = 2;
+        regs[3] = 3;
+        this.formaLinha(regs);
     }//GEN-LAST:event_jButton_restoABActionPerformed
 
     private void jButton_fatorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_fatorialActionPerformed
         // TODO add your handling code here:
-        this.controlador.fatorialAB();
-        
-        int[] auxA = this.controlador.getInfosReg(0); //Informações do Reg A para a tabela
-        float reg = (float) auxA[0] / (float) auxA[2];
-        if(auxA[1] == 1)
-            reg *= -1;
-        this.linha[1] = reg;
-        
-        int[] auxB = this.controlador.getInfosReg(1); //Informações do Reg B para a tabela
-        reg = (float) auxB[0] / (float) auxB[2];
-        if(auxB[1] == 1)
-            reg *= -1;
-        this.linha[2] = reg;
-        
+        this.controlador.fatorialA();
+
         this.linha[0] = "5 Fatorial"; //Operação
-        //Adicona a linha na tabela
-        this.table.addRow(linha);
+        int[] regs = new int[2];
+        regs[0] = 0;
+        regs[1] = 2;
+        this.formaLinha(regs);
     }//GEN-LAST:event_jButton_fatorialActionPerformed
 
     private void inteiros_MNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inteiros_MNActionPerformed

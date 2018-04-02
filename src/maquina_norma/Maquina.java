@@ -249,7 +249,7 @@ public class Maquina {
             //A divisão inteira para quando quando o dividendo for menor que o divisor
             if (this.AMenorB(regA, regB)) {
                 break;
-            } else {   
+            } else {
                 //RegD é usado como auxiliar para decrementar o dividendo
                 this.atribuirRegABC(regD, regB, regAux);
                 while (true) {
@@ -264,22 +264,36 @@ public class Maquina {
             }
         }
     }
-    
-    private void fatorialRegAB(Registrador regA, Registrador regB){
+
+    private void fatorialRegA(Registrador regA, Registrador regC) {
         Registrador reg1, reg2; //Auxiliares para a multiplicação
         reg1 = new Registrador();
         reg2 = new Registrador();
         this.zeraReg(reg1);
         this.zeraReg(reg2);
-        
-        while(true){
-            if(regA.isZero()){
+
+        while (true) {
+            if (regC.isZero()) {
                 break;
             }
-            this.multiplicaRegACBD(regB, regA, reg1, reg2);
-            regA.decrementa();
+            this.multiplicaRegACBD(regA, regC, reg1, reg2);
+            regC.decrementa();
         }
     }
+
+    private void divideRegReaisAB(Registrador regA, Registrador regB, Registrador divA, Registrador divB) {
+        Registrador aux1, aux2;
+        aux1 = new Registrador();
+        aux2 = new Registrador();
+
+        this.multiplicaRegACBD(regA, divB, aux1, aux2);
+        this.multiplicaRegACBD(divA, regB, aux1, aux2);
+    }
+
+    public boolean menorAux(Registrador regA, Registrador regB){
+        return this.AMenorIgualB(regA, regB);
+    } 
+    
 
     // Operação com NUMEROS
     public void zerarNum(int pos) {
@@ -481,7 +495,7 @@ public class Maquina {
         sinalC = this.sinais.get(pos3);
 
         this.divideRegIntABCD(regA, regB, regC, regD);
-        
+
         //A for positivo e B negativo C é negativo
         if (sinalA.isZero()) {
             if (!sinalB.isZero()) {
@@ -490,20 +504,55 @@ public class Maquina {
         } else { //A for negativo e B positivo C é negativo
             if (sinalB.isZero()) {
                 sinalC.incrementa();
+            } else {   //Se ambos são negativos A é positivo
+                sinalC.decrementa();
             }
         }
-        
+
         return;
     }
-    
-    public void fatorialNumAB(int pos1, int pos2){
+
+    public void fatorialNumA(int pos1, int pos2) {
+        Registrador regA, regC;
+
+        regA = this.regs.get(pos1);
+        regC = this.regs.get(pos2);
+        this.zeraReg(regA);
+        regA.incrementa();
+        this.atribuiReg(regC, 5);
+
+        this.fatorialRegA(regA, regC);
+        this.regs.get(0).getValor();
+        this.regs.get(2).getValor();
+    }
+
+    public void divideNumReaisA(int pos1, int pos2) {
         Registrador regA, regB;
-        
+        Registrador divA, divB;
+        Registrador sinalA, sinalB;
+
         regA = this.regs.get(pos1);
         regB = this.regs.get(pos2);
-        this.atribuiReg(regA, 5);
-        this.atribuiReg(regB, 1);
-        
-        this.fatorialRegAB(regA, regB);
+
+        divA = this.divs.get(pos1);
+        divB = this.divs.get(pos2);
+
+        sinalA = this.sinais.get(pos1);
+        sinalB = this.sinais.get(pos2);
+
+        this.divideRegReaisAB(regA, regB, divA, divB);
+
+        //A for positivo e B negativo A é negativo
+        if (sinalA.isZero()) {
+            if (!sinalB.isZero()) {
+                sinalA.incrementa();
+            }
+        } else { //A for negativo e B positivo A é negativo
+            if (sinalB.isZero()) {
+                sinalA.incrementa();
+            } else {//Se ambos são negativos A é positivo
+                sinalA.decrementa();
+            }
+        }
     }
 }
