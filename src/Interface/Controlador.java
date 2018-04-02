@@ -72,4 +72,8 @@ public class Controlador {
     public void fatorialA() {
         this.maquina.fatorialNumA(0, 2);
     }
+    
+    public void potenciacaoAB(){
+        this.maquina.potenciacaoNumABC(0, 1, 2);
+    }
 }
