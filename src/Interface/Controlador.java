@@ -58,4 +58,7 @@ public class Controlador {
         this.maquina.divideNumIntABCD(0, 1, 2, 3);
     }
         
+    public void fatorialAB(){
+        this.maquina.fatorialNumAB(0, 1);
+    }
 }

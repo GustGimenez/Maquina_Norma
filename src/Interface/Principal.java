@@ -75,6 +75,7 @@ public class Principal extends javax.swing.JFrame {
         jButton_primo = new javax.swing.JButton();
         jButton_restoAB = new javax.swing.JButton();
         jButton_fatorial = new javax.swing.JButton();
+        jButton_potenciacao = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         inteiros_MN = new javax.swing.JMenuItem();
@@ -267,12 +268,14 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        jButton_fatorial.setText("Fatorial de A = 5");
+        jButton_fatorial.setText("Fatorial de 5");
         jButton_fatorial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton_fatorialActionPerformed(evt);
             }
         });
+
+        jButton_potenciacao.setText("Potenciação de 5");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -290,6 +293,7 @@ public class Principal extends javax.swing.JFrame {
             .addComponent(jButton_primo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jButton_restoAB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jButton_fatorial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jButton_potenciacao, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -312,7 +316,9 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(jButton_restoAB)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton_fatorial)
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton_potenciacao)
+                .addContainerGap(7, Short.MAX_VALUE))
         );
 
         jMenu1.setText("Números");
@@ -503,10 +509,50 @@ public class Principal extends javax.swing.JFrame {
 
     private void jButton_restoABActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_restoABActionPerformed
         // TODO add your handling code here:
+        this.controlador.divAB();
+        
+        int[] auxA = this.controlador.getInfosReg(0); //Informações do Reg A para a tabela
+        float reg = (float) auxA[0] / (float) auxA[2];
+        if(auxA[1] == 1)
+            reg *= -1;
+        this.linha[1] = reg;
+        
+        int[] auxB = this.controlador.getInfosReg(1); //Informações do Reg B para a tabela
+        reg = (float) auxB[0] / (float) auxB[2];
+        if(auxB[1] == 1)
+            reg *= -1;
+        this.linha[2] = reg;
+        
+        int[] auxC = this.controlador.getInfosReg(2); //Informações do Reg C para a tabela
+        reg = (float) auxC[0] / (float) auxC[2];
+        if(auxC[1] == 1)
+            reg *= -1;
+        this.linha[3] = reg;
+        
+        this.linha[0] = "A / B"; //Operação
+        //Adicona a linha na tabela
+        this.table.addRow(linha);
     }//GEN-LAST:event_jButton_restoABActionPerformed
 
     private void jButton_fatorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_fatorialActionPerformed
         // TODO add your handling code here:
+        this.controlador.fatorialAB();
+        
+        int[] auxA = this.controlador.getInfosReg(0); //Informações do Reg A para a tabela
+        float reg = (float) auxA[0] / (float) auxA[2];
+        if(auxA[1] == 1)
+            reg *= -1;
+        this.linha[1] = reg;
+        
+        int[] auxB = this.controlador.getInfosReg(1); //Informações do Reg B para a tabela
+        reg = (float) auxB[0] / (float) auxB[2];
+        if(auxB[1] == 1)
+            reg *= -1;
+        this.linha[2] = reg;
+        
+        this.linha[0] = "5 Fatorial"; //Operação
+        //Adicona a linha na tabela
+        this.table.addRow(linha);
     }//GEN-LAST:event_jButton_fatorialActionPerformed
 
     private void inteiros_MNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inteiros_MNActionPerformed
@@ -566,6 +612,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton jButton_atri_B;
     private javax.swing.JButton jButton_fatorial;
     private javax.swing.JButton jButton_multAB;
+    private javax.swing.JButton jButton_potenciacao;
     private javax.swing.JButton jButton_primo;
     private javax.swing.JButton jButton_restoAB;
     private javax.swing.JButton jButton_somaAB;

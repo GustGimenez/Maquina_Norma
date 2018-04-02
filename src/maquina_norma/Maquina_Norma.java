@@ -22,14 +22,6 @@ public class Maquina_Norma {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         Maquina maquina = new Maquina();
         
-        int valor = Integer.valueOf(input.readLine());
-        maquina.atribuir(0, valor, 1, 0);
-        
-        valor = Integer.valueOf(input.readLine());
-        maquina.atribuir(1, valor, 1, 0);
-        
-        maquina.divideNumIntABCD(0, 1, 2, 3);
-        
-        System.out.println("Pausa");
+        maquina.fatorialNumAB(0, 1);
     }
 }
