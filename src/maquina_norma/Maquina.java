@@ -294,6 +294,20 @@ public class Maquina {
         return this.AMenorIgualB(regA, regB);
     } 
     
+    private void potenciacaoRegABC(Registrador regA, Registrador regB, Registrador regC){
+        Registrador aux1, aux2;
+        aux1 = new Registrador();
+        aux2 = new Registrador();
+        
+        while(true){
+            if(regC.isZero()){
+                return;
+            }
+            this.multiplicaRegACBD(regA, regB, aux1, aux2);
+            regC.decrementa();
+        }
+    }
+    
 
     // Operação com NUMEROS
     public void zerarNum(int pos) {
@@ -554,5 +568,23 @@ public class Maquina {
                 sinalA.decrementa();
             }
         }
+    }
+    
+    public void potenciacaoNumABC(int pos1, int pos2, int pos3){
+        Registrador regA, regB, regC, aux1;
+        
+        aux1 = new Registrador();
+        regA = this.regs.get(pos1);
+        regB = this.regs.get(pos2);
+        regC = this.regs.get(pos3);
+        
+        this.atribuirRegABC(regC, regA, aux1);
+        this.zeraReg(regA);
+        regA.incrementa();
+        this.atribuiReg(regB, 5);
+        
+        this.potenciacaoRegABC(regA, regB, regC);
+        
+        this.regs.get(0).getValor();
     }
 }

@@ -288,6 +288,11 @@ public class Principal extends javax.swing.JFrame {
         });
 
         jButton_potenciacao.setText("Potenciação de 5");
+        jButton_potenciacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_potenciacaoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -508,6 +513,18 @@ public class Principal extends javax.swing.JFrame {
     private void jTextField_sinal_reaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField_sinal_reaisActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField_sinal_reaisActionPerformed
+
+    private void jButton_potenciacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_potenciacaoActionPerformed
+        // TODO add your handling code here:
+        this.controlador.potenciacaoAB();
+        
+        this.linha[0] = "Potenciacao de 5"; //Operação
+        int[] regs = new int[3];
+        regs[0] = 0;
+        regs[1] = 1;
+        regs[2] = 2;
+        this.formaLinha(regs);
+    }//GEN-LAST:event_jButton_potenciacaoActionPerformed
 
     /**
      * @param args the command line arguments
