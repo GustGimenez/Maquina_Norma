@@ -6,6 +6,8 @@
 package Interface;
 
 import java.awt.CardLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -20,10 +22,13 @@ public class Principal extends javax.swing.JFrame {
     private DefaultTableModel table;
     private int contLinhasTabela;
     private Object[] linha; //Guarda a ultima linha da tabela
+    private Dimension dim;
 
     public Principal() {
         initComponents();
         this.controlador = new Controlador();
+        this.dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
 
         //Inicializando o cardlayout, para trocar entre os JPanels
         this.tipoNum = true;
@@ -472,6 +477,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void jButton_primoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_primoActionPerformed
         // TODO add your handling code here:
+        this.controlador.primoABCD();
     }//GEN-LAST:event_jButton_primoActionPerformed
 
     private void jButton_restoABActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_restoABActionPerformed
@@ -517,7 +523,7 @@ public class Principal extends javax.swing.JFrame {
     private void jButton_potenciacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_potenciacaoActionPerformed
         // TODO add your handling code here:
         this.controlador.potenciacaoAB();
-        
+
         this.linha[0] = "Potenciacao de 5"; //Operação
         int[] regs = new int[3];
         regs[0] = 0;
