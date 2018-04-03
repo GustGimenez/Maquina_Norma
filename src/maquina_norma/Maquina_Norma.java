@@ -5,9 +5,8 @@
  */
 package maquina_norma;
 
-import java.io.BufferedReader;
+import Interface.Principal;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 /**
  *
@@ -19,9 +18,8 @@ public class Maquina_Norma {
      */
     public static void main(String[] args) throws IOException {
         // TODO code application logic here
-        Maquina maquina = new Maquina();
+        Principal view = new Principal();
         
-        maquina.atribuir(0, 4, 1, 0);
-        maquina.primoNumABCD(0, 1, 2, 3);
+        view.setVisible(true);
     }
 }

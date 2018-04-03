@@ -76,4 +76,8 @@ public class Controlador {
     public void potenciacaoAB(){
         this.maquina.potenciacaoNumABC(0, 1, 2);
     }
+    
+    public void primoABCD(){
+        this.maquina.primoNumABCD(0, 1, 2, 3);
+    }
 }

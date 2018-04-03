@@ -317,26 +317,25 @@ public class Maquina {
         regC.incrementa();
         regC.incrementa(); // 3
 
-        while(this.AMenorIgualB(regC, regB)) {
+        while (this.AMenorIgualB(regC, regB)) {
             this.atribuirRegABC(aux1, regA, aux2); // Atribuir o valor de A para que não seja perdido
             // Divide o valor de A pelo valor teste
-            if(inteiro){
+            if (inteiro) {
                 this.divideRegIntABCD(aux1, regC, aux2, regD);
-            }
-            else{
+            } else {
                 this.divideRegReaisAB(aux1, regC, aux2, regD);
             }
-            
-            if(aux1.isZero()){
+
+            if (aux1.isZero()) {
                 JOptionPane.showMessageDialog(null, "Não é primo!");
                 regC.getValor();
                 return;
             }
-            
+
             regC.incrementa();
             regC.incrementa();
         }
-        
+
         JOptionPane.showMessageDialog(null, "É primo!");
     }
 
@@ -646,8 +645,34 @@ public class Maquina {
             this.divideRegReaisAB(aux1, regC, regB, regD);
         }
 
-        // Falta ver se ele for igual a 2
-        
+        if (aux1.isZero()) {
+            this.zeraReg(aux2);
+            aux2.incrementa();
+            aux2.incrementa();  // = 2
+            if (this.AMenorB(regA, aux2)) {   // Se for menor que 2
+                aux2.decrementa(); // = 1
+                if (this.AMenorIgualB(regA, aux2)) { // E <= 1
+                    JOptionPane.showMessageDialog(null, "Não é primo!");
+                    return;
+                } else {
+                    aux2.decrementa(); // = 0
+                    if (this.AMenorIgualB(regA, aux2)){
+                        JOptionPane.showMessageDialog(null, "Não é primo!");
+                        return;
+                    }
+                }
+            } else {
+                if (this.AMenorIgualB(regA, aux2)) { // Se for 2
+                    JOptionPane.showMessageDialog(null, "É primo!");
+                    return;
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Não é primo!");
+                    return;
+                }
+            }
+        }
+
         this.zeraReg(regC);
         this.zeraReg(regD);
         this.primoRegABCD(regA, regB, regC, regD, aux);
