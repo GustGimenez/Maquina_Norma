@@ -6,6 +6,7 @@
 package maquina_norma;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -290,24 +291,54 @@ public class Maquina {
         this.multiplicaRegACBD(divA, regB, aux1, aux2);
     }
 
-    public boolean menorAux(Registrador regA, Registrador regB){
+    public boolean menorAux(Registrador regA, Registrador regB) {
         return this.AMenorIgualB(regA, regB);
-    } 
-    
-    private void potenciacaoRegABC(Registrador regA, Registrador regB, Registrador regC){
+    }
+
+    private void potenciacaoRegABC(Registrador regA, Registrador regB, Registrador regC) {
         Registrador aux1, aux2;
         aux1 = new Registrador();
         aux2 = new Registrador();
-        
-        while(true){
-            if(regC.isZero()){
+
+        while (true) {
+            if (regC.isZero()) {
                 return;
             }
             this.multiplicaRegACBD(regA, regB, aux1, aux2);
             regC.decrementa();
         }
     }
-    
+
+    private void primoRegABCD(Registrador regA, Registrador regB, Registrador regC, Registrador regD, boolean inteiro) {
+        Registrador aux1, aux2;
+        aux1 = new Registrador();
+        aux2 = new Registrador();
+        regC.incrementa();
+        regC.incrementa();
+        regC.incrementa(); // 3
+
+        while(this.AMenorIgualB(regC, regB)) {
+            this.atribuirRegABC(aux1, regA, aux2); // Atribuir o valor de A para que não seja perdido
+            // Divide o valor de A pelo valor teste
+            if(inteiro){
+                this.divideRegIntABCD(aux1, regC, aux2, regD);
+            }
+            else{
+                this.divideRegReaisAB(aux1, regC, aux2, regD);
+            }
+            
+            if(aux1.isZero()){
+                JOptionPane.showMessageDialog(null, "Não é primo!");
+                regC.getValor();
+                return;
+            }
+            
+            regC.incrementa();
+            regC.incrementa();
+        }
+        
+        JOptionPane.showMessageDialog(null, "É primo!");
+    }
 
     // Operação com NUMEROS
     public void zerarNum(int pos) {
@@ -569,22 +600,56 @@ public class Maquina {
             }
         }
     }
-    
-    public void potenciacaoNumABC(int pos1, int pos2, int pos3){
+
+    public void potenciacaoNumABC(int pos1, int pos2, int pos3) {
         Registrador regA, regB, regC, aux1;
-        
+
         aux1 = new Registrador();
         regA = this.regs.get(pos1);
         regB = this.regs.get(pos2);
         regC = this.regs.get(pos3);
-        
+
         this.atribuirRegABC(regC, regA, aux1);
         this.zeraReg(regA);
         regA.incrementa();
         this.atribuiReg(regB, 5);
-        
+
         this.potenciacaoRegABC(regA, regB, regC);
-        
+
         this.regs.get(0).getValor();
+    }
+
+    public void primoNumABCD(int pos1, int pos2, int pos3, int pos4) {
+        Registrador regA, regB, regC, regD, divA, aux1, aux2;
+        boolean aux;
+
+        regA = this.regs.get(pos1); // Número a ser verificado
+        regB = this.regs.get(pos2); // Guarda a metade do valor do registrador
+        regC = this.regs.get(pos3); // Usado para comparar e para auxiliar na divisão
+        regD = this.regs.get(pos4); // Usado para auxiliar na divisão
+        divA = this.divs.get(pos1); // Usado para ver se o número é inteiro ou real
+        aux1 = new Registrador();
+        aux2 = new Registrador();
+
+        this.atribuirRegABC(aux1, regA, aux2); // Atribui o valor de A para um aux 
+        this.zeraReg(regC);                             // para nao ser perdido na divisão
+        regC.incrementa();
+
+        if (this.AMenorIgualB(divA, regC)) {
+            aux = true;
+            regC.incrementa(); // 2
+            this.divideRegIntABCD(aux1, regC, regB, regD);
+        } // Divide o número por 2 e salve em regB
+        else {
+            aux = false;
+            regC.incrementa(); // 2
+            this.divideRegReaisAB(aux1, regC, regB, regD);
+        }
+
+        // Falta ver se ele for igual a 2
+        
+        this.zeraReg(regC);
+        this.zeraReg(regD);
+        this.primoRegABCD(regA, regB, regC, regD, aux);
     }
 }

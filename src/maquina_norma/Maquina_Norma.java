@@ -21,7 +21,7 @@ public class Maquina_Norma {
         // TODO code application logic here
         Maquina maquina = new Maquina();
         
-        maquina.atribuir(0, 2, 1, 0);
-        maquina.potenciacaoNumABC(0, 1, 2);
+        maquina.atribuir(0, 4, 1, 0);
+        maquina.primoNumABCD(0, 1, 2, 3);
     }
 }
