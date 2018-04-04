@@ -78,6 +78,26 @@ public class Controlador {
     }
     
     public void primoABCD(){
-        this.maquina.primoNumABCD(0, 1, 2, 3);
+        this.maquina.primoNumABCD(0, 2);
+    }
+    
+    public void zeraMaquina(){
+        this.maquina.resetRegs();
+    }
+    
+    public void empilha(int num){
+        this.maquina.empilha(num);
+    }
+    
+    public int desempilha(){
+        return this.maquina.desempilha();
+    }
+    
+    public int topoPilha(){
+        return this.maquina.recuperaTopo();
+    }
+    
+    public void inicializaPilha(){
+        this.maquina.inicializaPilha();
     }
 }

@@ -309,34 +309,66 @@ public class Maquina {
         }
     }
 
-    private void primoRegABCD(Registrador regA, Registrador regB, Registrador regC, Registrador regD, boolean inteiro) {
-        Registrador aux1, aux2;
+    private boolean primoRegAC(Registrador regA, Registrador regC) {
+        Registrador aux1;
         aux1 = new Registrador();
-        aux2 = new Registrador();
+        this.zeraReg(regC);
         regC.incrementa();
-        regC.incrementa();
+        regC.incrementa();// C = 2
+
+        if (this.AMenorB(regA, regC)) {
+            return false;
+        }
+        if (this.AMenorIgualB(regA, regC)) {
+            return true;
+        }
         regC.incrementa(); // 3
-
-        while (this.AMenorIgualB(regC, regB)) {
-            this.atribuirRegABC(aux1, regA, aux2); // Atribuir o valor de A para que não seja perdido
-            // Divide o valor de A pelo valor teste
-            if (inteiro) {
-                this.divideRegIntABCD(aux1, regC, aux2, regD);
-            } else {
-                this.divideRegReaisAB(aux1, regC, aux2, regD);
+        this.atribuirRegABC(regC, regA, aux1);
+        regC.decrementa();
+        while (true) {
+            if (this.divideReg(regC, regA)) {
+                break;
             }
-
-            if (aux1.isZero()) {
-                JOptionPane.showMessageDialog(null, "Não é primo!");
-                regC.getValor();
-                return;
-            }
-
-            regC.incrementa();
-            regC.incrementa();
+            regC.decrementa();
         }
 
-        JOptionPane.showMessageDialog(null, "É primo!");
+        regC.decrementa();
+        return regC.isZero();
+    }
+
+    private boolean divideReg(Registrador reg1, Registrador reg2) {
+        Registrador aux1, aux2, aux3;
+
+        aux1 = new Registrador();
+        aux2 = new Registrador();
+        aux3 = new Registrador();
+
+        this.atribuirRegABC(aux1, reg2, aux2);
+        this.divideRegIntABCD(aux1, reg1, aux2, aux3);
+
+        return aux1.isZero();
+    }
+
+    private void NEssimoPrimo(Registrador reg1, Registrador reg2) {
+        //Encontra o n-ésimo numero primo e armazena em reg1 (n está em reg2)
+        Registrador aux = new Registrador();
+        Registrador aux2 = new Registrador();
+
+        this.atribuirRegABC(aux, reg2, aux2);
+        this.zeraReg(reg1);
+        while (true) {
+            while (true) {
+                if (this.primoRegAC(reg1, aux2)) {
+                    break;
+                }
+                reg1.incrementa();
+            }
+            aux.decrementa();
+            if (aux.isZero()) {
+                break;
+            }
+            reg1.incrementa();
+        }
     }
 
     // Operação com NUMEROS
@@ -450,13 +482,13 @@ public class Maquina {
                 //SOMA DE DOIS NUMEROS POSITIVOS
                 this.somaRegABC(regA, auxB, regC);
             } else // A positivo e B negativo
-            if (this.AMenorB(regA, auxB)) {
-                //Se |A| < |B|, então A fica negativo
-                this.difRegABC(regA, auxB, regC);
-                sinalA.incrementa();
-            } else {
-                this.difRegABC(regA, auxB, regC);
-            }
+             if (this.AMenorB(regA, auxB)) {
+                    //Se |A| < |B|, então A fica negativo
+                    this.difRegABC(regA, auxB, regC);
+                    sinalA.incrementa();
+                } else {
+                    this.difRegABC(regA, auxB, regC);
+                }
         } else if (sinalB.isZero()) {
             // A é negativo e B Positivo
 
@@ -545,7 +577,8 @@ public class Maquina {
             if (!sinalB.isZero()) {
                 sinalC.incrementa();
             }
-        } else { //A for negativo e B positivo C é negativo
+        } else //A for negativo e B positivo C é negativo
+        {
             if (sinalB.isZero()) {
                 sinalC.incrementa();
             } else {   //Se ambos são negativos A é positivo
@@ -557,13 +590,13 @@ public class Maquina {
     }
 
     public void fatorialNumA(int pos1, int pos2) {
-        Registrador regA, regC;
-
+        Registrador regA, regC, aux;
+        aux = new Registrador();
         regA = this.regs.get(pos1);
         regC = this.regs.get(pos2);
+        this.atribuirRegABC(regC, regA, aux);
         this.zeraReg(regA);
         regA.incrementa();
-        this.atribuiReg(regC, 5);
 
         this.fatorialRegA(regA, regC);
         this.regs.get(0).getValor();
@@ -591,7 +624,8 @@ public class Maquina {
             if (!sinalB.isZero()) {
                 sinalA.incrementa();
             }
-        } else { //A for negativo e B positivo A é negativo
+        } else //A for negativo e B positivo A é negativo
+        {
             if (sinalB.isZero()) {
                 sinalA.incrementa();
             } else {//Se ambos são negativos A é positivo
@@ -618,63 +652,102 @@ public class Maquina {
         this.regs.get(0).getValor();
     }
 
-    public void primoNumABCD(int pos1, int pos2, int pos3, int pos4) {
-        Registrador regA, regB, regC, regD, divA, aux1, aux2;
-        boolean aux;
+    public void primoNumABCD(int pos1, int pos3) {
+        Registrador regA, regC;
 
         regA = this.regs.get(pos1); // Número a ser verificado
-        regB = this.regs.get(pos2); // Guarda a metade do valor do registrador
         regC = this.regs.get(pos3); // Usado para comparar e para auxiliar na divisão
-        regD = this.regs.get(pos4); // Usado para auxiliar na divisão
-        divA = this.divs.get(pos1); // Usado para ver se o número é inteiro ou real
-        aux1 = new Registrador();
-        aux2 = new Registrador();
-
-        this.atribuirRegABC(aux1, regA, aux2); // Atribui o valor de A para um aux 
-        this.zeraReg(regC);                             // para nao ser perdido na divisão
-        regC.incrementa();
-
-        if (this.AMenorIgualB(divA, regC)) {
-            aux = true;
-            regC.incrementa(); // 2
-            this.divideRegIntABCD(aux1, regC, regB, regD);
-        } // Divide o número por 2 e salve em regB
-        else {
-            aux = false;
-            regC.incrementa(); // 2
-            this.divideRegReaisAB(aux1, regC, regB, regD);
-        }
-
-        if (aux1.isZero()) {
-            this.zeraReg(aux2);
-            aux2.incrementa();
-            aux2.incrementa();  // = 2
-            if (this.AMenorB(regA, aux2)) {   // Se for menor que 2
-                aux2.decrementa(); // = 1
-                if (this.AMenorIgualB(regA, aux2)) { // E <= 1
-                    JOptionPane.showMessageDialog(null, "Não é primo!");
-                    return;
-                } else {
-                    aux2.decrementa(); // = 0
-                    if (this.AMenorIgualB(regA, aux2)){
-                        JOptionPane.showMessageDialog(null, "Não é primo!");
-                        return;
-                    }
-                }
-            } else {
-                if (this.AMenorIgualB(regA, aux2)) { // Se for 2
-                    JOptionPane.showMessageDialog(null, "É primo!");
-                    return;
-                }
-                else{
-                    JOptionPane.showMessageDialog(null, "Não é primo!");
-                    return;
-                }
-            }
-        }
 
         this.zeraReg(regC);
-        this.zeraReg(regD);
-        this.primoRegABCD(regA, regB, regC, regD, aux);
+
+        if (this.primoRegAC(regA, regC)) { // Se for 2
+            JOptionPane.showMessageDialog(null, "É primo!");
+            return;
+        } else {
+            JOptionPane.showMessageDialog(null, "Não é primo!");
+            return;
+        }
+
+    }
+
+    public void resetRegs() {
+        this.zerarNum(0);
+        this.zerarNum(1);
+        this.zerarNum(2);
+        this.zerarNum(3);
+    }
+
+    public void empilha(int num) {
+        Registrador aux1 = new Registrador();
+        Registrador aux2 = new Registrador();
+        Registrador aux = new Registrador();
+        Registrador auxPrimo = new Registrador();
+        Registrador regIndex = this.regs.get(1);
+        Registrador regStack = this.regs.get(0);
+
+        this.atribuiReg(aux, num);
+        this.NEssimoPrimo(auxPrimo, regIndex);
+
+        while (true) {
+            if (aux.isZero()) {
+                break;
+            }
+            this.multiplicaRegACBD(regStack, auxPrimo, aux1, aux2);
+            aux.decrementa();
+        }
+        regIndex.incrementa();
+    }
+
+    public void inicializaPilha() {
+        this.resetRegs();
+        Registrador regStack, regIndex;
+
+        regStack = this.regs.get(0);
+        regIndex = this.regs.get(1);
+
+        regStack.incrementa();
+        regIndex.incrementa();
+    }
+
+    public int desempilha() {
+        Registrador aux1 = new Registrador();
+        Registrador aux2 = new Registrador();
+        Registrador aux = new Registrador();
+        Registrador auxPrimo = new Registrador();
+        Registrador regIndex = this.regs.get(1);
+        Registrador regStack = this.regs.get(0);
+        regIndex.decrementa();
+
+        this.NEssimoPrimo(auxPrimo, regIndex);
+        this.zeraReg(aux);
+        while (this.divideReg(auxPrimo, regStack)) {
+            this.divideRegIntABCD(regStack, auxPrimo, aux1, aux2);
+            this.atribuirRegABC(regStack, aux1, aux2);
+            aux.incrementa();
+        }
+
+        return aux.getValor();
+    }
+
+    public int recuperaTopo() {
+        Registrador aux1 = new Registrador();
+        Registrador aux2 = new Registrador();
+        Registrador aux = new Registrador();
+        Registrador auxPrimo = new Registrador();
+        Registrador auxStack = new Registrador();
+        Registrador regIndex = this.regs.get(1);
+        Registrador regStack = this.regs.get(0);
+        regIndex.decrementa();
+
+        this.atribuirRegABC(auxStack, regStack, aux1);
+        this.NEssimoPrimo(auxPrimo, regIndex);
+        this.zeraReg(aux);
+        while (this.divideReg(auxPrimo, auxStack)) {
+            this.divideRegIntABCD(auxStack, auxPrimo, aux1, aux2);
+            this.atribuirRegABC(auxStack, aux1, aux2);
+            aux.incrementa();
+        }
+        regIndex.incrementa();
+        return aux.getValor();
     }
 }

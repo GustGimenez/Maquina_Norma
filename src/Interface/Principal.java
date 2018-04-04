@@ -8,6 +8,7 @@ package Interface;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -25,11 +26,12 @@ public class Principal extends javax.swing.JFrame {
     private Dimension dim;
 
     public Principal() {
+
         initComponents();
         this.controlador = new Controlador();
         this.dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
-
+        this.setTitle("Maquina Norma - Inteiros");
         //Inicializando o cardlayout, para trocar entre os JPanels
         this.tipoNum = true;
         this.panelAtual = (CardLayout) this.jPanel_valores_ops_principal.getLayout();
@@ -39,11 +41,15 @@ public class Principal extends javax.swing.JFrame {
         this.table = (DefaultTableModel) this.jTable_regs.getModel();
         this.linha = new Object[5];
         linha[0] = "Inicio";    //Operação
-        linha[1] = "n/a";       //Reg A
-        linha[2] = "n/a";       //Reg B
-        linha[3] = "n/a";       //Reg C
-        linha[4] = "n/a";       //Reg D
+        linha[1] = "(0, 0, 1)";       //Reg A
+        linha[2] = "(0, 0, 1)";       //Reg B
+        linha[3] = "(0, 0, 1)";       //Reg C
+        linha[4] = "(0, 0, 1)";       //Reg D
         this.table.addRow(linha);   //Adiciona a linha na tabela
+        
+        this.jButton_empilha.setEnabled(false);
+        this.jButton_desempilha.setEnabled(false);
+        this.jButton_mostrarTopo.setEnabled(false);
     }
 
     public void formaLinha(int[] regs) {
@@ -70,7 +76,7 @@ public class Principal extends javax.swing.JFrame {
         jPanel_inteiros = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextField_valor_int = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
+        labelSinal = new javax.swing.JLabel();
         jTextField_sinal_int = new javax.swing.JTextField();
         jPanel_reais = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -93,10 +99,16 @@ public class Principal extends javax.swing.JFrame {
         jButton_restoAB = new javax.swing.JButton();
         jButton_fatorial = new javax.swing.JButton();
         jButton_potenciacao = new javax.swing.JButton();
+        jButton_empilha = new javax.swing.JButton();
+        jButton_desempilha = new javax.swing.JButton();
+        jButton_mostrarTopo = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         inteiros_MN = new javax.swing.JMenuItem();
-        reais_MN = new javax.swing.JMenuItem();
+        racionais_MN = new javax.swing.JMenuItem();
+        mi_Pilha = new javax.swing.JMenuItem();
+        jMenu_Ajuda = new javax.swing.JMenu();
+        jMenuItem_exibirAjuda = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,7 +116,10 @@ public class Principal extends javax.swing.JFrame {
 
         jLabel1.setText("Valor do Registrador");
 
-        jLabel7.setText("Sinal do Valor");
+        jTextField_valor_int.setText("0");
+        jTextField_valor_int.setInheritsPopupMenu(true);
+
+        labelSinal.setText("Sinal do Valor");
 
         jTextField_sinal_int.setText("0");
 
@@ -116,7 +131,7 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel_inteirosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel7))
+                    .addComponent(labelSinal))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel_inteirosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextField_valor_int)
@@ -132,7 +147,7 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(jTextField_valor_int, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel_inteirosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
+                    .addComponent(labelSinal)
                     .addComponent(jTextField_sinal_int, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(51, Short.MAX_VALUE))
         );
@@ -231,7 +246,9 @@ public class Principal extends javax.swing.JFrame {
         );
         jPanel_regs_princiapalLayout.setVerticalGroup(
             jPanel_regs_princiapalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addGroup(jPanel_regs_princiapalLayout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 506, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jLabel8.setText("Operações");
@@ -285,7 +302,7 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        jButton_fatorial.setText("Fatorial de 5");
+        jButton_fatorial.setText("Fatorial de A");
         jButton_fatorial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton_fatorialActionPerformed(evt);
@@ -296,6 +313,27 @@ public class Principal extends javax.swing.JFrame {
         jButton_potenciacao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton_potenciacaoActionPerformed(evt);
+            }
+        });
+
+        jButton_empilha.setText("Empilha");
+        jButton_empilha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_empilhaActionPerformed(evt);
+            }
+        });
+
+        jButton_desempilha.setText("Desempilha");
+        jButton_desempilha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_desempilhaActionPerformed(evt);
+            }
+        });
+
+        jButton_mostrarTopo.setText("Mostrar Topo");
+        jButton_mostrarTopo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_mostrarTopoActionPerformed(evt);
             }
         });
 
@@ -316,6 +354,9 @@ public class Principal extends javax.swing.JFrame {
             .addComponent(jButton_restoAB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jButton_fatorial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jButton_potenciacao, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jButton_empilha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jButton_desempilha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jButton_mostrarTopo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -340,7 +381,13 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(jButton_fatorial)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton_potenciacao)
-                .addContainerGap(7, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton_empilha)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton_desempilha)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton_mostrarTopo)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jMenu1.setText("Números");
@@ -353,15 +400,35 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu1.add(inteiros_MN);
 
-        reais_MN.setText("Reais");
-        reais_MN.addActionListener(new java.awt.event.ActionListener() {
+        racionais_MN.setText("Racionais");
+        racionais_MN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                reais_MNActionPerformed(evt);
+                racionais_MNActionPerformed(evt);
             }
         });
-        jMenu1.add(reais_MN);
+        jMenu1.add(racionais_MN);
+
+        mi_Pilha.setText("Pilha");
+        mi_Pilha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mi_PilhaActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mi_Pilha);
 
         jMenuBar1.add(jMenu1);
+
+        jMenu_Ajuda.setText("Ajuda");
+
+        jMenuItem_exibirAjuda.setText("Exibir");
+        jMenuItem_exibirAjuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_exibirAjudaActionPerformed(evt);
+            }
+        });
+        jMenu_Ajuda.add(jMenuItem_exibirAjuda);
+
+        jMenuBar1.add(jMenu_Ajuda);
 
         setJMenuBar(jMenuBar1);
 
@@ -387,8 +454,8 @@ public class Principal extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel_valores_ops_principal, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(29, 29, 29))))
         );
 
         pack();
@@ -408,6 +475,10 @@ public class Principal extends javax.swing.JFrame {
             valor = Integer.valueOf(this.jTextField_valor_reais.getText());
             sinal = Integer.valueOf(this.jTextField_sinal_reais.getText());
             divisor = Integer.valueOf(this.jTextField_divisor.getText());
+            if (divisor == 0) {
+                JOptionPane.showMessageDialog(this, "Divisor não pode ser 0!\n Alterado para 1");
+                divisor = 1;
+            }
         }
 
         this.controlador.atribuirA(valor, sinal, divisor);
@@ -442,6 +513,10 @@ public class Principal extends javax.swing.JFrame {
             valor = Integer.valueOf(this.jTextField_valor_reais.getText());
             sinal = Integer.valueOf(this.jTextField_sinal_reais.getText());
             divisor = Integer.valueOf(this.jTextField_divisor.getText());
+            if (divisor == 0) {
+                JOptionPane.showMessageDialog(this, "Divisor não pode ser 0!\n Alterado para 1");
+                divisor = 1;
+            }
         }
 
         this.controlador.atribuirB(valor, sinal, divisor);
@@ -478,6 +553,13 @@ public class Principal extends javax.swing.JFrame {
     private void jButton_primoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_primoActionPerformed
         // TODO add your handling code here:
         this.controlador.primoABCD();
+        this.linha[0] = "A é Primo"; //Operação
+        int[] linhas = new int[4];
+        linhas[0] = 0;
+        linhas[1] = 1;
+        linhas[2] = 2;
+        linhas[3] = 3;
+        this.formaLinha(linhas);
     }//GEN-LAST:event_jButton_primoActionPerformed
 
     private void jButton_restoABActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_restoABActionPerformed
@@ -497,7 +579,7 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.controlador.fatorialA();
 
-        this.linha[0] = "5 Fatorial"; //Operação
+        this.linha[0] = "A Fatorial"; //Operação
         int[] regs = new int[2];
         regs[0] = 0;
         regs[1] = 2;
@@ -506,15 +588,69 @@ public class Principal extends javax.swing.JFrame {
 
     private void inteiros_MNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inteiros_MNActionPerformed
         // TODO add your handling code here:
+        
         this.tipoNum = true;
         this.panelAtual.show(this.jPanel_valores_ops_principal, "card_inteiros");
+        this.jButton_fatorial.setEnabled(true);
+        this.jButton_primo.setEnabled(true);
+        this.jButton_potenciacao.setEnabled(true);
+        this.jButton_atri_A.setEnabled(true);
+        this.jButton_atri_B.setEnabled(true);
+        this.jButton_somaAB.setEnabled(true);
+        this.jButton_somaABC.setEnabled(true);
+        this.jButton_multAB.setEnabled(true);
+        this.jButton_restoAB.setEnabled(true);
+
+        this.jButton_empilha.setEnabled(false);
+        this.jButton_desempilha.setEnabled(false);
+        this.jButton_mostrarTopo.setEnabled(false);
+
+        this.labelSinal.setVisible(true);
+        this.jTextField_sinal_int.setVisible(true);
+
+        this.setTitle("Maquina Norma - Inteiros");
+        this.jTextField_divisor.setText("1");
+        this.controlador.zeraMaquina();
+        this.linha[0] = "Reset"; //Operação
+        
+        int[] regs = new int[4];
+        regs[0] = 0;
+        regs[1] = 1;
+        regs[2] = 2;
+        regs[3] = 3;
+        this.formaLinha(regs);
     }//GEN-LAST:event_inteiros_MNActionPerformed
 
-    private void reais_MNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reais_MNActionPerformed
+    private void racionais_MNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_racionais_MNActionPerformed
         // TODO add your handling code here:
+        if (!this.tipoNum) {
+            return;
+        }
         this.tipoNum = false;
         this.panelAtual.show(this.jPanel_valores_ops_principal, "card_reais");
-    }//GEN-LAST:event_reais_MNActionPerformed
+        this.jButton_fatorial.setEnabled(false);
+        this.jButton_primo.setEnabled(false);
+        this.jButton_potenciacao.setEnabled(false);
+        this.jButton_atri_A.setEnabled(true);
+        this.jButton_atri_B.setEnabled(true);
+        this.jButton_somaAB.setEnabled(true);
+        this.jButton_somaABC.setEnabled(true);
+        this.jButton_multAB.setEnabled(true);
+        this.jButton_restoAB.setEnabled(true);
+
+        this.jButton_empilha.setEnabled(false);
+        this.jButton_desempilha.setEnabled(false);
+        this.jButton_mostrarTopo.setEnabled(false);
+        this.setTitle("Maquina Norma - Racionais");
+        this.controlador.zeraMaquina();
+        this.linha[0] = "Reset"; //Operação
+        int[] regs = new int[4];
+        regs[0] = 0;
+        regs[1] = 1;
+        regs[2] = 2;
+        regs[3] = 3;
+        this.formaLinha(regs);
+    }//GEN-LAST:event_racionais_MNActionPerformed
 
     private void jTextField_sinal_reaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField_sinal_reaisActionPerformed
         // TODO add your handling code here:
@@ -531,6 +667,96 @@ public class Principal extends javax.swing.JFrame {
         regs[2] = 2;
         this.formaLinha(regs);
     }//GEN-LAST:event_jButton_potenciacaoActionPerformed
+
+    private void jMenuItem_exibirAjudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_exibirAjudaActionPerformed
+        JOptionPane.showMessageDialog(this, "A interface mostra 4 registradores. Cada um é definido por"
+                + "tres registradores da máquina: (S,N,D), onde\n"
+                + "S: representa o sinal (0 para (+) e 1 para (-) );\n"
+                + "N: representa o numerador;\n"
+                + "D: representa o divisor;\n\n"
+                + "A maquina permite trabalhar com numeros inteiros"
+                + "e numeros racionais. Para números inteiros, o divisor sempre será 1.\n"
+                + "Algumas macros estão desabilitadas para números racionais (fatorial, potenciação e verificação de número primo)"
+                + " pois elas só fazem\n sentido com inteiros. Quando troca a representação os registradores são zerados\n\n"
+                + "Operações:\n"
+                + "Atribuir ao A ou B: Utiliza os campos de entrada para setar os valores dos registradores A ou B.\n"
+                + "A + B: Atribui o valor da soma dos valores de A e B ao registrador A (perde o valor de B).\n"
+                + "A + B usando C: Ultilza o registrador C para recuperar o valor de B na soma de A com B.\n"
+                + "A x B: computa a multiplicação de A com B e armazena o resultado em A, ultilizando os registradores C e D para recuperar o valor de B\n"
+                + "A é primo: Faz a verificação se o valor absoluto do registrador A é primo (Mensagem na tela)(apenas Inteiros).\n"
+                + "Resto de A / B: Atribui o resto da divisão entre A e B para o registrador A e o resultado da divisão ao registrador C.\n"
+                + "Fatorial de A: Armazena em A o resultado do fatorial do número antes da operação (Utiliza C, perdendo o valor anterior)(apenas Inteiros).\n"
+                + "Potenciação de 5: calcula 5 elevado ao conteúdo de A e armazena o resultado em A (apenas Inteiros).");
+
+    }//GEN-LAST:event_jMenuItem_exibirAjudaActionPerformed
+
+    private void mi_PilhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mi_PilhaActionPerformed
+        // TODO add your handling code here:
+
+        this.panelAtual.show(this.jPanel_valores_ops_principal, "card_inteiros");
+        this.jButton_fatorial.setEnabled(false);
+        this.jButton_primo.setEnabled(false);
+        this.jButton_potenciacao.setEnabled(false);
+        this.jButton_atri_A.setEnabled(false);
+        this.jButton_atri_B.setEnabled(false);
+        this.jButton_somaAB.setEnabled(false);
+        this.jButton_somaABC.setEnabled(false);
+        this.jButton_multAB.setEnabled(false);
+        this.jButton_restoAB.setEnabled(false);
+
+        this.jButton_empilha.setEnabled(true);
+        this.jButton_desempilha.setEnabled(true);
+        this.jButton_mostrarTopo.setEnabled(true);
+        this.setTitle("Maquina Norma - Pilha");
+        this.jTextField_divisor.setText("1");
+
+        this.labelSinal.setVisible(false);
+        this.jTextField_sinal_int.setVisible(false);
+        this.controlador.inicializaPilha();
+        this.linha[0] = "Inicializa Pilha"; //Operação
+        int[] regs = new int[4];
+        regs[0] = 0;
+        regs[1] = 1;
+        regs[2] = 2;
+        regs[3] = 3;
+        this.formaLinha(regs);
+        
+    }//GEN-LAST:event_mi_PilhaActionPerformed
+
+    private void jButton_empilhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_empilhaActionPerformed
+        // TODO add your handling code here:
+        int num = Integer.parseInt(this.jTextField_valor_int.getText());
+
+        if (num < 0) {
+            num = num * (-1);
+        }
+        
+        this.controlador.empilha(num);
+        this.linha[0] = "Empilha";
+        int[] linhas = new int[2];
+        linhas[0] = 0;
+        linhas[1] = 1;
+        
+        this.formaLinha(linhas);
+    }//GEN-LAST:event_jButton_empilhaActionPerformed
+
+    private void jButton_desempilhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_desempilhaActionPerformed
+        // TODO add your handling code here:
+        int num = this.controlador.desempilha();
+        this.linha[0] = "Desempilha";
+        int[] linhas = new int[2];
+        linhas[0] = 0;
+        linhas[1] = 1;
+        
+        this.formaLinha(linhas);
+        JOptionPane.showMessageDialog(this,"Valor removido do topo: " + num);
+    }//GEN-LAST:event_jButton_desempilhaActionPerformed
+
+    private void jButton_mostrarTopoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_mostrarTopoActionPerformed
+        int num = this.controlador.topoPilha();
+        
+        JOptionPane.showMessageDialog(this,"Topo da pilha: " + num);
+    }//GEN-LAST:event_jButton_mostrarTopoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -571,7 +797,10 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem inteiros_MN;
     private javax.swing.JButton jButton_atri_A;
     private javax.swing.JButton jButton_atri_B;
+    private javax.swing.JButton jButton_desempilha;
+    private javax.swing.JButton jButton_empilha;
     private javax.swing.JButton jButton_fatorial;
+    private javax.swing.JButton jButton_mostrarTopo;
     private javax.swing.JButton jButton_multAB;
     private javax.swing.JButton jButton_potenciacao;
     private javax.swing.JButton jButton_primo;
@@ -582,10 +811,11 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem_exibirAjuda;
+    private javax.swing.JMenu jMenu_Ajuda;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel_inteiros;
     private javax.swing.JPanel jPanel_reais;
@@ -598,6 +828,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField_sinal_reais;
     private javax.swing.JTextField jTextField_valor_int;
     private javax.swing.JTextField jTextField_valor_reais;
-    private javax.swing.JMenuItem reais_MN;
+    private javax.swing.JLabel labelSinal;
+    private javax.swing.JMenuItem mi_Pilha;
+    private javax.swing.JMenuItem racionais_MN;
     // End of variables declaration//GEN-END:variables
 }
